@@ -24,6 +24,7 @@ export function buildExhibits(scene) {
       case 'lab':      buildLab(group, data); break;
       case 'carousel': buildCarousel(group, data); break;
       case 'arcade':   buildArcade(group, data); break;
+      case 'iceberg':  buildIceberg(group, data); break;
       case 'qa':       buildQA(group, data); break;
       default:         buildScreen(group, data); break;
     }
@@ -279,6 +280,57 @@ function buildArcade(group, data) {
   group.add(marquee);
 
   addLabel(group, data.name, 0, 0.3, -ALCOVE_DEPTH * 0.3 + 0.6);
+}
+
+// ─── Iceberg — Stacked Horizontal Slabs ─────────────────────────────
+function buildIceberg(group, data) {
+  const z0 = -ALCOVE_DEPTH * 0.3;
+  const layers = [
+    { w: 0.6, h: 0.12, y: 2.05, color: 0xeeffff, emissive: 0xccffff, intensity: 0.5 },  // tip
+    { w: 0.9, h: 0.10, y: 1.85, color: 0x88ddff, emissive: 0x66ccee, intensity: 0.35 },
+    { w: 1.2, h: 0.14, y: 1.65, color: 0x55bbdd, emissive: 0x44aacc, intensity: 0.25 },
+    { w: 1.5, h: 0.16, y: 1.42, color: 0x3399bb, emissive: 0x228899, intensity: 0.2 },
+    { w: 1.8, h: 0.18, y: 1.16, color: 0x226688, emissive: 0x115577, intensity: 0.15 },
+    { w: 2.0, h: 0.20, y: 0.88, color: 0x114466, emissive: 0x0a3355, intensity: 0.1 },
+  ];
+
+  // Waterline disc between layer 1 and 2
+  const waterline = new THREE.Mesh(
+    new THREE.CylinderGeometry(1.1, 1.1, 0.01, 16),
+    new THREE.MeshStandardMaterial({
+      color: 0x4488aa,
+      emissive: 0x336688,
+      emissiveIntensity: 0.15,
+      transparent: true,
+      opacity: 0.35,
+      flatShading: true,
+    })
+  );
+  waterline.position.set(0, 1.92, z0);
+  group.add(waterline);
+
+  // Build iceberg slabs
+  const iceGroup = new THREE.Group();
+  layers.forEach((l) => {
+    const slab = new THREE.Mesh(
+      new THREE.BoxGeometry(l.w, l.h, l.w * 0.6),
+      new THREE.MeshStandardMaterial({
+        color: l.color,
+        emissive: l.emissive,
+        emissiveIntensity: l.intensity,
+        flatShading: true,
+      })
+    );
+    slab.position.set(0, l.y, 0);
+    iceGroup.add(slab);
+  });
+
+  iceGroup.position.set(0, 0, z0);
+  iceGroup.userData.float = true;
+  iceGroup.userData.baseY = 0;
+  group.add(iceGroup);
+
+  addLabel(group, data.name, 0, 0.55, z0 + 0.7);
 }
 
 // ─── QA Pedestal + Floating Block Letters ────────────────────────────
