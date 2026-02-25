@@ -1,0 +1,94 @@
+/* ─── Tour Mode (Mobile 3D) ─────────────────────────────────────── */
+
+/* Full-screen fade overlay for transitions */
+#tour-fade {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  background: #0a0a0f;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.4s ease-in-out;
+}
+#tour-fade.active {
+  opacity: 1;
+}
+
+/* Bottom HUD bar — location name + hint */
+#tour-hud {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 22;
+  display: none;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(transparent, rgba(10, 10, 15, 0.85));
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  text-align: center;
+  pointer-events: none;
+}
+
+#tour-location {
+  font-size: clamp(9px, 1.6vw, 12px);
+  color: #00ff41;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  text-shadow: 0 0 8px rgba(0, 255, 65, 0.4);
+  margin-bottom: 0.3rem;
+}
+
+#tour-hint {
+  font-size: clamp(7px, 1.2vw, 9px);
+  color: rgba(255, 255, 255, 0.45);
+  font-family: 'Courier New', monospace;
+}
+
+/* Exhibit interact button — shown at alcove stops */
+#tour-exhibit-btn {
+  position: fixed;
+  bottom: 4.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 22;
+  display: none;
+  background: rgba(10, 10, 15, 0.9);
+  border: 1px solid rgba(0, 255, 65, 0.5);
+  color: #00ff41;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: clamp(8px, 1.4vw, 11px);
+  padding: 0.7rem 1.2rem;
+  cursor: pointer;
+  pointer-events: auto;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+#tour-exhibit-btn:active {
+  background: rgba(0, 255, 65, 0.15);
+  border-color: #00ff41;
+}
+
+/* Back button — shown at alcove stops */
+#tour-back-btn {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 22;
+  display: none;
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: clamp(8px, 1.2vw, 10px);
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: border-color 0.2s;
+}
+
+#tour-back-btn:active {
+  border-color: #00ff41;
+  color: #00ff41;
+}

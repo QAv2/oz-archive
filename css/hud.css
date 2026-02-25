@@ -1,0 +1,300 @@
+/* ─── HUD + Info Panels + Overlays ───────────────────────────────── */
+
+/* Crosshair */
+#crosshair {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 4px;
+  height: 4px;
+  border: 1px solid rgba(0, 255, 65, 0.6);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 20;
+  display: none;
+}
+
+/* HUD prompt */
+#hud-prompt {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: clamp(8px, 1.1vw, 11px);
+  color: rgba(0, 255, 65, 0.7);
+  text-align: center;
+  pointer-events: none;
+  z-index: 20;
+  transition: opacity 0.5s;
+  text-shadow: 0 0 10px rgba(0, 255, 65, 0.3);
+}
+
+/* Info panel (proximity) */
+#info-panel {
+  position: fixed;
+  bottom: 5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(10, 10, 15, 0.92);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  padding: 1rem 1.5rem;
+  max-width: min(90vw, 420px);
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  z-index: 20;
+  display: none;
+  backdrop-filter: blur(4px);
+}
+
+#info-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 65, 0.02) 0px,
+    rgba(0, 255, 65, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.info-name {
+  font-size: clamp(10px, 1.3vw, 13px);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.info-desc {
+  font-size: clamp(8px, 1vw, 10px);
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.8;
+  margin-bottom: 0.5rem;
+  font-family: 'Courier New', monospace;
+}
+
+.info-action {
+  font-size: clamp(8px, 1vw, 10px);
+  color: #00ff41;
+  opacity: 0.8;
+}
+
+/* Detail overlay */
+#overlay-panel {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  background: rgba(10, 10, 15, 0.95);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(8px);
+}
+
+.overlay-content {
+  background: rgba(20, 20, 30, 0.95);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  max-width: min(90vw, 560px);
+  padding: 2rem;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+}
+
+.overlay-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 65, 0.015) 0px,
+    rgba(0, 255, 65, 0.015) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.overlay-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.overlay-title {
+  font-size: clamp(11px, 1.4vw, 14px);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+.overlay-close-btn {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  font-family: inherit;
+  transition: border-color 0.2s;
+}
+
+.overlay-close-btn:hover {
+  border-color: #00ff41;
+  color: #00ff41;
+}
+
+.overlay-body {
+  font-size: clamp(8px, 1vw, 10px);
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 2;
+  font-family: 'Courier New', monospace;
+}
+
+.overlay-link a {
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.overlay-link a:hover {
+  opacity: 0.8;
+}
+
+.overlay-hint {
+  margin-top: 1rem;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: clamp(7px, 0.9vw, 9px);
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* Door overlay */
+#door-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 30;
+  background: #0a0a0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  transition: opacity 0.5s;
+}
+
+#door-overlay .door-label {
+  font-size: clamp(14px, 2vw, 20px);
+  color: #ff4444;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  text-shadow: 0 0 20px rgba(255, 68, 68, 0.5);
+  border: 2px solid #ff4444;
+  padding: 1rem 2rem;
+  animation: doorPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes doorPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* CRT toggle button */
+#crt-toggle {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 25;
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(0, 255, 65, 0.3);
+  color: #00ff41;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 9px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  display: none;
+  transition: border-color 0.2s;
+}
+
+#crt-toggle:hover {
+  border-color: #00ff41;
+}
+
+/* Mobile fallback */
+#mobile-fallback {
+  display: none;
+  min-height: 100vh;
+  background: #0a0a0f;
+  color: rgba(255, 255, 255, 0.92);
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+#mobile-fallback::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 65, 0.02) 0px,
+    rgba(0, 255, 65, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
+
+.mobile-header {
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(0, 255, 65, 0.3);
+}
+
+.mobile-header h1 {
+  font-size: clamp(14px, 3vw, 18px);
+  color: #00ff41;
+  margin-bottom: 0.5rem;
+}
+
+.mobile-header p {
+  font-size: clamp(8px, 1.8vw, 10px);
+  color: rgba(255, 255, 255, 0.5);
+  font-family: 'Courier New', monospace;
+}
+
+.mobile-card {
+  background: rgba(26, 26, 46, 0.6);
+  border: 1px solid rgba(0, 255, 65, 0.15);
+  padding: 1.2rem;
+  margin-bottom: 1rem;
+  text-decoration: none;
+  display: block;
+  transition: border-color 0.2s;
+  position: relative;
+}
+
+.mobile-card:hover {
+  border-color: rgba(0, 255, 65, 0.5);
+}
+
+.mobile-card-name {
+  font-size: clamp(10px, 2vw, 12px);
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.mobile-card-desc {
+  font-size: clamp(8px, 1.6vw, 10px);
+  color: rgba(255, 255, 255, 0.6);
+  line-height: 1.8;
+  font-family: 'Courier New', monospace;
+}
+
+.mobile-card-action {
+  margin-top: 0.5rem;
+  font-size: clamp(7px, 1.4vw, 9px);
+  opacity: 0.6;
+}

@@ -1,0 +1,62 @@
+/* ─── Boot Screen ────────────────────────────────────────────────── */
+@font-face {
+  font-family: 'Press Start 2P';
+  src: url('../fonts/PressStart2P.woff2') format('woff2');
+  font-display: swap;
+}
+
+#boot-screen {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: #0a0a0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  color: #00ff41;
+}
+
+#boot-text {
+  width: min(90vw, 640px);
+  font-size: clamp(10px, 1.4vw, 14px);
+  line-height: 2;
+  overflow-y: auto;
+  max-height: 80vh;
+  padding: 2rem;
+}
+
+.boot-line {
+  white-space: pre-wrap;
+  word-break: break-all;
+  min-height: 1.8em;
+}
+
+.prompt-line {
+  margin-top: 0.5em;
+  color: #00ff41;
+}
+
+.blink-cursor::after {
+  content: '█';
+  animation: blink 0.7s step-end infinite;
+}
+
+@keyframes blink {
+  50% { opacity: 0; }
+}
+
+/* Scanline overlay on boot */
+#boot-screen::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.15) 0px,
+    rgba(0, 0, 0, 0.15) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+}
