@@ -48,15 +48,32 @@ function buildScreen(group, data) {
   frame.position.set(0, 1.8, -ALCOVE_DEPTH * 0.3);
   group.add(frame);
 
-  // Screen surface (emissive with exhibit color)
+  // Screen material — load texture if available, else solid color
+  const screenMat = new THREE.MeshStandardMaterial({
+    color: data.lightColor,
+    emissive: data.lightColor,
+    emissiveIntensity: 0.3,
+    flatShading: true,
+  });
+
+  if (data.texture) {
+    const loader = new THREE.TextureLoader();
+    loader.load(data.texture, (tex) => {
+      tex.magFilter = THREE.NearestFilter;
+      tex.minFilter = THREE.NearestFilter;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      screenMat.map = tex;
+      screenMat.color.set(0xffffff);
+      screenMat.emissive.set(0xffffff);
+      screenMat.emissiveMap = tex;
+      screenMat.emissiveIntensity = 0.8;
+      screenMat.needsUpdate = true;
+    });
+  }
+
   const screen = new THREE.Mesh(
     new THREE.PlaneGeometry(2.2, 1.4),
-    new THREE.MeshStandardMaterial({
-      color: data.lightColor,
-      emissive: data.lightColor,
-      emissiveIntensity: 0.3,
-      flatShading: true,
-    })
+    screenMat
   );
   screen.position.set(0, 1.8, -ALCOVE_DEPTH * 0.3 + 0.06);
   group.add(screen);
@@ -65,48 +82,199 @@ function buildScreen(group, data) {
   addLabel(group, data.name, 0, 0.8, -ALCOVE_DEPTH * 0.3);
 }
 
-// ─── Desk + CRT Monitor ────────────────────────────────────────────
+// ─── 90s PC Workstation ─────────────────────────────────────────────
 function buildCRT(group, data) {
-  // Desk
+  const z0 = -ALCOVE_DEPTH * 0.3;
+  const beige = 0xc8b898;
+  const beigeDark = 0xa89878;
+  const wood = 0x3a2818;
+
+  // ── Desk (dark wood, wider) ──
   const desk = new THREE.Mesh(
-    new THREE.BoxGeometry(1.8, 0.08, 0.8),
-    new THREE.MeshStandardMaterial({ color: 0x332211, flatShading: true })
+    new THREE.BoxGeometry(2.2, 0.06, 0.9),
+    new THREE.MeshStandardMaterial({ color: wood, flatShading: true })
   );
-  desk.position.set(0, 0.75, -ALCOVE_DEPTH * 0.3);
+  desk.position.set(0, 0.74, z0);
   group.add(desk);
 
-  // Desk legs
-  for (const [dx, dz] of [[-0.8, -0.35], [0.8, -0.35], [-0.8, 0.35], [0.8, 0.35]]) {
+  // Desk legs — thick rectangular
+  for (const [dx, dz] of [[-1.0, -0.38], [1.0, -0.38], [-1.0, 0.38], [1.0, 0.38]]) {
     const leg = new THREE.Mesh(
-      new THREE.BoxGeometry(0.05, 0.75, 0.05),
-      new THREE.MeshStandardMaterial({ color: 0x332211, flatShading: true })
+      new THREE.BoxGeometry(0.06, 0.74, 0.06),
+      new THREE.MeshStandardMaterial({ color: wood, flatShading: true })
     );
-    leg.position.set(dx, 0.375, -ALCOVE_DEPTH * 0.3 + dz);
+    leg.position.set(dx, 0.37, z0 + dz);
     group.add(leg);
   }
 
-  // CRT body
-  const crt = new THREE.Mesh(
-    new THREE.BoxGeometry(0.9, 0.7, 0.7),
-    new THREE.MeshStandardMaterial({ color: 0x222222, flatShading: true })
+  // Desk back panel (modesty panel)
+  const backPanel = new THREE.Mesh(
+    new THREE.BoxGeometry(2.2, 0.50, 0.04),
+    new THREE.MeshStandardMaterial({ color: wood, flatShading: true })
   );
-  crt.position.set(0, 1.14, -ALCOVE_DEPTH * 0.3);
-  group.add(crt);
+  backPanel.position.set(0, 0.50, z0 - 0.43);
+  group.add(backPanel);
 
-  // CRT screen
-  const screen = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.72, 0.54),
-    new THREE.MeshStandardMaterial({
-      color: data.lightColor,
-      emissive: data.lightColor,
-      emissiveIntensity: 0.4,
-      flatShading: true,
-    })
+  // ── CRT Monitor (beige, chunky) ──
+  // Monitor base/stand
+  const monStand = new THREE.Mesh(
+    new THREE.BoxGeometry(0.5, 0.04, 0.35),
+    new THREE.MeshStandardMaterial({ color: beigeDark, flatShading: true })
   );
-  screen.position.set(0, 1.14, -ALCOVE_DEPTH * 0.3 + 0.36);
+  monStand.position.set(0, 0.79, z0 - 0.05);
+  group.add(monStand);
+
+  // Monitor body — deep CRT box
+  const monBody = new THREE.Mesh(
+    new THREE.BoxGeometry(0.95, 0.72, 0.65),
+    new THREE.MeshStandardMaterial({ color: beige, flatShading: true })
+  );
+  monBody.position.set(0, 1.17, z0 - 0.08);
+  group.add(monBody);
+
+  // Monitor bezel (darker inset frame around screen)
+  const bezel = new THREE.Mesh(
+    new THREE.BoxGeometry(0.82, 0.60, 0.03),
+    new THREE.MeshStandardMaterial({ color: 0x333333, flatShading: true })
+  );
+  bezel.position.set(0, 1.19, z0 + 0.24);
+  group.add(bezel);
+
+  // Monitor screen — texture loaded
+  const screenMat = new THREE.MeshStandardMaterial({
+    color: data.lightColor,
+    emissive: data.lightColor,
+    emissiveIntensity: 0.4,
+    flatShading: true,
+  });
+
+  if (data.texture) {
+    const loader = new THREE.TextureLoader();
+    loader.load(data.texture, (tex) => {
+      tex.magFilter = THREE.NearestFilter;
+      tex.minFilter = THREE.NearestFilter;
+      tex.colorSpace = THREE.SRGBColorSpace;
+      screenMat.map = tex;
+      screenMat.color.set(0xffffff);
+      screenMat.emissive.set(0xffffff);
+      screenMat.emissiveMap = tex;
+      screenMat.emissiveIntensity = 0.7;
+      screenMat.needsUpdate = true;
+    });
+  }
+
+  const screen = new THREE.Mesh(
+    new THREE.PlaneGeometry(0.74, 0.52),
+    screenMat
+  );
+  screen.position.set(0, 1.19, z0 + 0.255);
   group.add(screen);
 
-  addLabel(group, data.name, 0, 0.55, -ALCOVE_DEPTH * 0.3 + 0.5);
+  // Power LED on monitor (green dot)
+  const monLed = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.012, 0.012, 0.01, 6),
+    new THREE.MeshStandardMaterial({
+      color: 0x00ff41, emissive: 0x00ff41, emissiveIntensity: 0.8, flatShading: true,
+    })
+  );
+  monLed.rotation.x = Math.PI / 2;
+  monLed.position.set(0.32, 0.92, z0 + 0.24);
+  group.add(monLed);
+
+  // ── Tower PC (beige, right side of desk) ──
+  const tower = new THREE.Mesh(
+    new THREE.BoxGeometry(0.20, 0.45, 0.42),
+    new THREE.MeshStandardMaterial({ color: beige, flatShading: true })
+  );
+  tower.position.set(0.85, 1.0, z0 - 0.05);
+  group.add(tower);
+
+  // Tower front panel (slightly darker)
+  const towerFront = new THREE.Mesh(
+    new THREE.BoxGeometry(0.18, 0.43, 0.01),
+    new THREE.MeshStandardMaterial({ color: beigeDark, flatShading: true })
+  );
+  towerFront.position.set(0.85, 1.0, z0 + 0.16);
+  group.add(towerFront);
+
+  // Floppy drive slot
+  const floppy = new THREE.Mesh(
+    new THREE.BoxGeometry(0.10, 0.012, 0.01),
+    new THREE.MeshStandardMaterial({ color: 0x444444, flatShading: true })
+  );
+  floppy.position.set(0.85, 1.14, z0 + 0.17);
+  group.add(floppy);
+
+  // CD-ROM drive slot
+  const cdrom = new THREE.Mesh(
+    new THREE.BoxGeometry(0.12, 0.025, 0.01),
+    new THREE.MeshStandardMaterial({ color: beigeDark, flatShading: true })
+  );
+  cdrom.position.set(0.85, 1.08, z0 + 0.17);
+  group.add(cdrom);
+
+  // CD-ROM eject button
+  const ejectBtn = new THREE.Mesh(
+    new THREE.BoxGeometry(0.015, 0.012, 0.008),
+    new THREE.MeshStandardMaterial({ color: 0x999988, flatShading: true })
+  );
+  ejectBtn.position.set(0.90, 1.06, z0 + 0.175);
+  group.add(ejectBtn);
+
+  // Power button on tower
+  const powerBtn = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.015, 0.015, 0.008, 8),
+    new THREE.MeshStandardMaterial({ color: 0x888877, flatShading: true })
+  );
+  powerBtn.rotation.x = Math.PI / 2;
+  powerBtn.position.set(0.85, 1.18, z0 + 0.175);
+  group.add(powerBtn);
+
+  // Tower power LED (green)
+  const towerLed = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.008, 0.008, 0.008, 6),
+    new THREE.MeshStandardMaterial({
+      color: 0x00ff41, emissive: 0x00ff41, emissiveIntensity: 0.8, flatShading: true,
+    })
+  );
+  towerLed.rotation.x = Math.PI / 2;
+  towerLed.position.set(0.85, 1.16, z0 + 0.175);
+  group.add(towerLed);
+
+  // ── Keyboard ──
+  const keyboard = new THREE.Mesh(
+    new THREE.BoxGeometry(0.48, 0.02, 0.16),
+    new THREE.MeshStandardMaterial({ color: beigeDark, flatShading: true })
+  );
+  keyboard.position.set(-0.05, 0.78, z0 + 0.28);
+  group.add(keyboard);
+
+  // Key rows (dark inset to suggest keys)
+  for (let row = 0; row < 4; row++) {
+    const keys = new THREE.Mesh(
+      new THREE.BoxGeometry(0.42, 0.003, 0.025),
+      new THREE.MeshStandardMaterial({ color: 0x555550, flatShading: true })
+    );
+    keys.position.set(-0.05, 0.80, z0 + 0.22 + row * 0.035);
+    group.add(keys);
+  }
+
+  // ── Mouse + pad ──
+  const pad = new THREE.Mesh(
+    new THREE.BoxGeometry(0.18, 0.005, 0.20),
+    new THREE.MeshStandardMaterial({ color: 0x222244, flatShading: true })
+  );
+  pad.position.set(0.42, 0.775, z0 + 0.28);
+  group.add(pad);
+
+  const mouse = new THREE.Mesh(
+    new THREE.BoxGeometry(0.05, 0.02, 0.08),
+    new THREE.MeshStandardMaterial({ color: beige, flatShading: true })
+  );
+  mouse.position.set(0.42, 0.79, z0 + 0.28);
+  group.add(mouse);
+
+  addLabel(group, data.name, 0, 0.55, z0 + 0.55);
 }
 
 // ─── Lab Bench + Floating Geometry ──────────────────────────────────
