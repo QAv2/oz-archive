@@ -5,6 +5,7 @@ import { buildScene } from './scene.js';
 import { buildExhibits, updateExhibits } from './exhibits.js';
 import { createPlayer, lockPointer, enableMovement, disableMovement, updatePlayer, getCamera, getControls, isLocked } from './player.js';
 import { initInteraction, updateInteraction } from './interaction.js';
+import { initPortal, updatePortal } from './portal.js';
 import { runBootSequence, hideBootScreen } from './boot.js';
 import { createComposer, updateCRT, toggleCRT, renderComposer } from './shaders/crt.js';
 
@@ -56,6 +57,7 @@ async function init() {
     const result = createPlayer(renderer);
     cam = result.camera;
     initInteraction();
+    initPortal(scene);
   }
 
   // Post-processing
@@ -150,6 +152,7 @@ function animate() {
   } else {
     updatePlayer(delta);
     updateInteraction(elapsed);
+    updatePortal(delta, elapsed);
   }
 
   updateExhibits(elapsed);
