@@ -7,7 +7,7 @@ import { getCamera, isLocked } from './player.js';
 import { CEILING_HEIGHT } from './config.js';
 
 // TODO: update when dedicated device-spec page is deployed
-const PORTAL_URL = 'https://qav2.github.io/suppressed-physics/';
+const PORTAL_URL = 'https://qav2.github.io/suppressed-physics-map/';
 const CENTER_RADIUS = 3.0;
 const LOOK_UP_THRESHOLD = 0.7;    // camera.direction.y (≈45° above horizon)
 const HOLD_DURATION = 5.0;

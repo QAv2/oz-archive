@@ -86,7 +86,7 @@ export const EXHIBITS = [
     id: 'physics',
     name: 'Suppressed Physics',
     description: 'MHD/PIC simulation workspace — 21 experiments testing RS2 predictions against standard physics. Mercury vortex dynamics, plasma rotation, Faraday induction.',
-    url: 'https://qav2.github.io/inner-sanctum/',
+    url: 'https://qav2.github.io/suppressed-physics-map/',
     action: 'link',
     texture: 'textures/exhibit-physics.png',
     lightColor: 0xaa44ff,
