@@ -9,6 +9,7 @@ let infoPanel = null;
 let overlayPanel = null;
 let overlayActive = false;
 let overlayClickBound = false;
+let flashBusy = false;
 
 export function initInteraction() {
   infoPanel = document.getElementById('info-panel');
@@ -98,7 +99,22 @@ export function triggerExhibitAction(exhibitIndex) {
   const data = exhibit.data;
 
   if (data.action === 'link' && data.url) {
-    window.open(data.url, '_blank');
+    if (flashBusy) return;
+    flashBusy = true;
+    const el = document.getElementById('exhibit-flash');
+    if (el) {
+      el.style.background = `radial-gradient(circle, ${data.lightColorCSS}e6, ${data.lightColorCSS}33)`;
+      el.style.display = 'block';
+      requestAnimationFrame(() => { el.style.opacity = '1'; });
+      setTimeout(() => {
+        window.open(data.url, '_blank');
+        el.style.opacity = '0';
+        setTimeout(() => { el.style.display = 'none'; flashBusy = false; }, 800);
+      }, 700);
+    } else {
+      window.open(data.url, '_blank');
+      flashBusy = false;
+    }
   } else {
     showOverlay(data);
   }
