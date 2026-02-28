@@ -101,18 +101,21 @@ export function triggerExhibitAction(exhibitIndex) {
   if (data.action === 'link' && data.url) {
     if (flashBusy) return;
     flashBusy = true;
+
+    // Open link synchronously (inside user gesture) so popup blockers allow it
+    window.open(data.url, '_blank');
+
+    // Fire color flash overlay — purely visual feedback
     const el = document.getElementById('exhibit-flash');
     if (el) {
       el.style.background = `radial-gradient(circle, ${data.lightColorCSS}e6, ${data.lightColorCSS}33)`;
       el.style.display = 'block';
       requestAnimationFrame(() => { el.style.opacity = '1'; });
       setTimeout(() => {
-        window.open(data.url, '_blank');
         el.style.opacity = '0';
         setTimeout(() => { el.style.display = 'none'; flashBusy = false; }, 800);
       }, 700);
     } else {
-      window.open(data.url, '_blank');
       flashBusy = false;
     }
   } else {
