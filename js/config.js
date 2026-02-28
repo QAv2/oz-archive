@@ -129,7 +129,7 @@ export const BOOT_LINES = [
 ];
 
 export const BOOT_CHAR_DELAY = 30;  // ms per character for typewriter
-export const PROGRESS_STEPS = 20;
+export const PROGRESS_STEPS = 16;
 export const PROGRESS_STEP_DELAY = 60;
 
 // ─── Door Animation ─────────────────────────────────────────────────
