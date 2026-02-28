@@ -6,6 +6,7 @@ import { buildExhibits, updateExhibits } from './exhibits.js';
 import { createPlayer, lockPointer, enableMovement, disableMovement, updatePlayer, getCamera, getControls, isLocked } from './player.js';
 import { initInteraction, updateInteraction } from './interaction.js';
 import { initPortal, updatePortal } from './portal.js';
+import { initSkyPortal, updateSkyPortal } from './portal-sky.js';
 import { runBootSequence, hideBootScreen } from './boot.js';
 import { createComposer, updateCRT, toggleCRT, renderComposer } from './shaders/crt.js';
 
@@ -58,6 +59,7 @@ async function init() {
     cam = result.camera;
     initInteraction();
     initPortal(scene);
+    initSkyPortal(scene);
   }
 
   // Post-processing
@@ -153,6 +155,7 @@ function animate() {
     updatePlayer(delta);
     updateInteraction(elapsed);
     updatePortal(delta, elapsed);
+    updateSkyPortal(delta, elapsed);
   }
 
   updateExhibits(elapsed);
