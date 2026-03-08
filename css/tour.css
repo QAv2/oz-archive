@@ -92,3 +92,27 @@
   border-color: #00ff41;
   color: #00ff41;
 }
+
+/* Curator (PROXYCHAT) button — always visible in tour mode */
+#tour-curator-btn {
+  position: fixed;
+  top: 1rem;
+  right: 1rem;
+  z-index: 22;
+  display: none;
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(0, 255, 65, 0.4);
+  color: #00ff41;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: clamp(7px, 1.2vw, 9px);
+  padding: 0.5rem 0.7rem;
+  cursor: pointer;
+  pointer-events: auto;
+  text-shadow: 0 0 6px rgba(0, 255, 65, 0.3);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+#tour-curator-btn:active {
+  background: rgba(0, 255, 65, 0.15);
+  border-color: #00ff41;
+}

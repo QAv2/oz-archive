@@ -203,7 +203,8 @@
 #crt-toggle {
   position: fixed;
   top: 1rem;
-  right: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
   z-index: 25;
   background: rgba(10, 10, 15, 0.8);
   border: 1px solid rgba(0, 255, 65, 0.3);

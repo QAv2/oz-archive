@@ -162,3 +162,7 @@ export function closeOverlay() {
 export function isOverlayActive() {
   return overlayActive;
 }
+
+export function getActiveExhibitName() {
+  return activeExhibit ? activeExhibit.data.name : null;
+}

@@ -4,11 +4,12 @@ import { COLORS, PLAYER_HEIGHT, DOOR_SLIDE_DURATION, DOOR_AUTO_ADVANCE, EXHIBITS
 import { buildScene } from './scene.js';
 import { buildExhibits, updateExhibits } from './exhibits.js';
 import { createPlayer, lockPointer, enableMovement, disableMovement, updatePlayer, getCamera, getControls, isLocked } from './player.js';
-import { initInteraction, updateInteraction } from './interaction.js';
+import { initInteraction, updateInteraction, getActiveExhibitName } from './interaction.js';
 import { initPortal, updatePortal } from './portal.js';
 import { initSkyPortal, updateSkyPortal } from './portal-sky.js';
 import { runBootSequence, hideBootScreen } from './boot.js';
 import { createComposer, updateCRT, toggleCRT, renderComposer } from './shaders/crt.js';
+import { initProxyChat, toggleProxyChat } from './proxychat.js';
 
 let renderer, scene, composer;
 const clock = new THREE.Clock();
@@ -54,12 +55,14 @@ async function init() {
     cam = tourModule.createTourCamera(renderer);
     tourModule.initTourControls(renderer);
     tourModule.initHotspots(scene);
+    initProxyChat(() => tourModule.getCurrentExhibitName());
   } else {
     const result = createPlayer(renderer);
     cam = result.camera;
     initInteraction();
     initPortal(scene);
     initSkyPortal(scene);
+    initProxyChat(() => getActiveExhibitName());
   }
 
   // Post-processing
@@ -95,13 +98,24 @@ async function init() {
   if (isMobileMode) {
     // Start tour mode
     tourModule.startTour();
+
+    // Curator button for mobile
+    const curatorBtn = document.getElementById('tour-curator-btn');
+    curatorBtn.style.display = 'block';
+    curatorBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleProxyChat();
+    });
   } else {
     // Desktop pointer lock flow
     const hud = document.getElementById('hud-prompt');
     const crosshair = document.getElementById('crosshair');
 
-    hud.textContent = 'CLICK TO ENTER THE ARCHIVE';
-    hud.style.opacity = '1';
+    hud.innerHTML = '<span style="display:block; margin-bottom:0.8rem;">CLICK TO ENTER THE ARCHIVE</span>'
+      + '<span style="display:block; font-size:clamp(7px, 0.9vw, 9px); opacity:0.55;">PRESS T TO SPEAK WITH THE CURATOR</span>';
+    hud.style.opacity = '0';
+    // Fade in the legend after a short delay so the museum renders first
+    setTimeout(() => { hud.style.opacity = '1'; }, 600);
 
     const ctrl = getControls();
 
@@ -114,7 +128,8 @@ async function init() {
     ctrl.addEventListener('unlock', () => {
       disableMovement();
       crosshair.style.display = 'none';
-      hud.textContent = 'Click to resume';
+      hud.innerHTML = '<span style="display:block; margin-bottom:0.8rem;">Click to resume</span>'
+        + '<span style="display:block; font-size:clamp(7px, 0.9vw, 9px); opacity:0.55;">PRESS T TO SPEAK WITH THE CURATOR</span>';
       hud.style.opacity = '1';
     });
 

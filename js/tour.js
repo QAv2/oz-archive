@@ -339,6 +339,12 @@ export function startTour() {
 // ─── Per-Frame Update ───────────────────────────────────────────────
 const lookTarget = new THREE.Vector3();
 
+export function getCurrentExhibitName() {
+  if (currentStop <= 0) return null;
+  const idx = currentStop - 1;
+  return EXHIBITS[idx] ? EXHIBITS[idx].name : null;
+}
+
 export function updateTour(delta, elapsed) {
   if (!camera) return;
 
