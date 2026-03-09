@@ -371,6 +371,13 @@ async function handleUserMessage(text) {
   charCountEl.textContent = '';
   charCountEl.className = '';
 
+  // Check for /verify command
+  const verifyMatch = text.match(/^\/verify\s+(.+)/s);
+  if (verifyMatch) {
+    await handleVerify(verifyMatch[1]);
+    return;
+  }
+
   history.push({ role: 'user', content: text });
 
   await sendMessage(text);
@@ -425,6 +432,51 @@ async function sendMessage(text) {
     appendErrorMessage('[CONNECTION LOST] Unable to reach server. Try again.');
     setStatus('offline');
     console.warn('[PROXYCHAT] API error:', err);
+  } finally {
+    isThinking = false;
+    inputEl.disabled = false;
+    if (isOpen) inputEl.focus();
+  }
+}
+
+// ─── Verification ───────────────────────────────────────────────
+
+async function handleVerify(content) {
+  isThinking = true;
+  inputEl.disabled = true;
+  setStatus('thinking');
+
+  const indicator = showThinkingIndicator();
+
+  try {
+    const res = await fetch(PROXYCHAT_API_URL + '/verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ content }),
+    });
+
+    indicator.remove();
+
+    if (!res.ok) {
+      throw new Error(`HTTP ${res.status}`);
+    }
+
+    const data = await res.json();
+
+    if (data.error) {
+      appendErrorMessage(`[VERIFY] ${data.error}`);
+    } else if (data.formatted) {
+      await appendSystemMessage(data.formatted);
+    } else {
+      appendErrorMessage('[VERIFY] Unexpected response format.');
+    }
+
+    setStatus('connected');
+  } catch (err) {
+    indicator.remove();
+    appendErrorMessage('[VERIFY] Unable to reach verification service.');
+    setStatus('offline');
+    console.warn('[PROXYCHAT] Verify error:', err);
   } finally {
     isThinking = false;
     inputEl.disabled = false;
