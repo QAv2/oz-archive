@@ -74,7 +74,7 @@ export const EXHIBITS = [
   {
     id: 'intel',
     name: 'Intel Console',
-    description: 'Full-stack intelligence encyclopedia — 264 entities, 716 relationships, 418 sources. Entity profiles, relationship graphs, and structured analysis.',
+    description: 'Civilian OSINT dashboard — 825 entities, 1,411 relationships, 1,260 sources. 11 thematic branches, branch directory navigator, photo dossiers, and evidence-tiered relationship graphs.',
     url: 'https://qav2.github.io/intel-console/',
     action: 'link',
     texture: 'textures/exhibit-intel.png',
