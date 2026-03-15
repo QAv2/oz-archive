@@ -23,7 +23,7 @@ export function buildExhibits(scene) {
       case 'crt':      buildCRT(group, data); break;
       case 'lab':      buildLab(group, data); break;
       case 'carousel': buildCarousel(group, data); break;
-      case 'arcade':   buildArcade(group, data); break;
+      case 'arcade':   buildScreen(group, data); break;  // no exhibit uses this — fallback to screen
       case 'iceberg':  buildIceberg(group, data); break;
       case 'qa':       buildQA(group, data); break;
       default:         buildScreen(group, data); break;
@@ -368,87 +368,6 @@ function buildCarousel(group, data) {
   addLabel(group, data.name, 0, 0.5, -ALCOVE_DEPTH * 0.3 + 1.0);
 }
 
-// ─── Arcade Cabinet ─────────────────────────────────────────────────
-function buildArcade(group, data) {
-  // Cabinet body
-  const body = new THREE.Mesh(
-    new THREE.BoxGeometry(1.0, 1.8, 0.7),
-    new THREE.MeshStandardMaterial({ color: 0x1a1a2e, flatShading: true })
-  );
-  body.position.set(0, 0.9, -ALCOVE_DEPTH * 0.3);
-  group.add(body);
-
-  // Screen bezel (angled top)
-  const bezel = new THREE.Mesh(
-    new THREE.BoxGeometry(0.85, 0.65, 0.1),
-    new THREE.MeshStandardMaterial({ color: 0x111122, flatShading: true })
-  );
-  bezel.position.set(0, 1.5, -ALCOVE_DEPTH * 0.3 + 0.31);
-  bezel.rotation.x = -0.2;
-  group.add(bezel);
-
-  // Screen
-  const screen = new THREE.Mesh(
-    new THREE.PlaneGeometry(0.7, 0.5),
-    new THREE.MeshStandardMaterial({
-      color: data.lightColor,
-      emissive: data.lightColor,
-      emissiveIntensity: 0.4,
-      flatShading: true,
-    })
-  );
-  screen.position.set(0, 1.5, -ALCOVE_DEPTH * 0.3 + 0.37);
-  screen.rotation.x = -0.2;
-  group.add(screen);
-
-  // Control panel
-  const panel = new THREE.Mesh(
-    new THREE.BoxGeometry(0.85, 0.15, 0.4),
-    new THREE.MeshStandardMaterial({ color: 0x222233, flatShading: true })
-  );
-  panel.position.set(0, 1.0, -ALCOVE_DEPTH * 0.3 + 0.2);
-  panel.rotation.x = -0.3;
-  group.add(panel);
-
-  // Joystick
-  const stick = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.015, 0.015, 0.12, 6),
-    new THREE.MeshStandardMaterial({ color: 0xcccccc, flatShading: true })
-  );
-  stick.position.set(-0.15, 1.1, -ALCOVE_DEPTH * 0.3 + 0.25);
-  group.add(stick);
-
-  // Buttons
-  for (let b = 0; b < 3; b++) {
-    const btn = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.025, 0.025, 0.02, 8),
-      new THREE.MeshStandardMaterial({
-        color: [0xff4444, 0x44ff44, 0x4444ff][b],
-        emissive: [0xff4444, 0x44ff44, 0x4444ff][b],
-        emissiveIntensity: 0.3,
-        flatShading: true,
-      })
-    );
-    btn.position.set(0.08 + b * 0.08, 1.08, -ALCOVE_DEPTH * 0.3 + 0.25);
-    btn.rotation.x = -0.3;
-    group.add(btn);
-  }
-
-  // Marquee
-  const marquee = new THREE.Mesh(
-    new THREE.BoxGeometry(0.9, 0.25, 0.05),
-    new THREE.MeshStandardMaterial({
-      color: data.lightColor,
-      emissive: data.lightColor,
-      emissiveIntensity: 0.5,
-      flatShading: true,
-    })
-  );
-  marquee.position.set(0, 1.92, -ALCOVE_DEPTH * 0.3 + 0.3);
-  group.add(marquee);
-
-  addLabel(group, data.name, 0, 0.3, -ALCOVE_DEPTH * 0.3 + 0.6);
-}
 
 // ─── Iceberg — Stacked Horizontal Slabs ─────────────────────────────
 function buildIceberg(group, data) {
