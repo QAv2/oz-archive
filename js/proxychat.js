@@ -63,6 +63,7 @@ function buildDOM() {
   closeBtn.id = 'proxychat-close-btn';
   closeBtn.textContent = '\u00D7';
   closeBtn.title = 'Close (T or Esc)';
+  closeBtn.setAttribute('aria-label', 'Close chat');
   closeBtn.addEventListener('click', () => closeProxyChat());
 
   header.appendChild(title);
@@ -78,6 +79,8 @@ function buildDOM() {
   statusText = document.createElement('span');
   statusText.id = 'proxychat-status-text';
   statusText.textContent = 'CONNECTED';
+  statusText.setAttribute('aria-live', 'polite');
+  statusText.setAttribute('aria-atomic', 'true');
 
   status.appendChild(statusDot);
   status.appendChild(statusText);
@@ -101,6 +104,7 @@ function buildDOM() {
   inputEl.maxLength = MAX_MSG_LENGTH;
   inputEl.autocomplete = 'off';
   inputEl.spellcheck = false;
+  inputEl.setAttribute('aria-label', 'Ask the curator a question');
 
   charCountEl = document.createElement('span');
   charCountEl.id = 'proxychat-char-count';
@@ -109,6 +113,7 @@ function buildDOM() {
   sendBtn.id = 'proxychat-send-btn';
   sendBtn.textContent = '>';
   sendBtn.title = 'Send';
+  sendBtn.setAttribute('aria-label', 'Send message');
   sendBtn.addEventListener('click', () => {
     if (isThinking) return;
     const text = inputEl.value.trim();

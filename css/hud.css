@@ -1,3 +1,32 @@
+/* ─── Skip Link (a11y) ───────────────────────────────────────────── */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #00ff41;
+  color: #0a0a0f;
+  padding: 8px 16px;
+  z-index: 10000;
+  text-decoration: none;
+  font-family: monospace;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* Screen-reader only (a11y) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* ─── HUD + Info Panels + Overlays ───────────────────────────────── */
 
 /* Crosshair */
@@ -165,7 +194,7 @@
 
 .overlay-hint {
   margin-top: 1rem;
-  color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.65);
   font-size: clamp(7px, 0.9vw, 9px);
   font-family: 'Press Start 2P', monospace;
 }
@@ -219,6 +248,11 @@
 
 #crt-toggle:hover {
   border-color: #00ff41;
+}
+
+#crt-toggle:focus-visible {
+  outline: 2px solid #00ff41;
+  outline-offset: 2px;
 }
 
 /* Portal flash (floor — cyan) */
@@ -333,4 +367,18 @@
   margin-top: 0.5rem;
   font-size: clamp(7px, 1.4vw, 9px);
   opacity: 0.6;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .info-desc { color: rgba(255, 255, 255, 1); }
+  .overlay-hint { color: rgba(255, 255, 255, 0.8); }
+  #door-overlay .door-label { border-width: 3px; }
 }

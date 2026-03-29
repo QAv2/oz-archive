@@ -33,6 +33,23 @@ export function initInteraction() {
   // Close overlay button
   const closeBtn = document.getElementById('overlay-close');
   if (closeBtn) closeBtn.addEventListener('click', closeOverlay);
+
+  // Focus trap — keep Tab cycling within overlay when open
+  overlayPanel.addEventListener('keydown', function(e) {
+    if (e.key === 'Tab') {
+      const focusable = overlayPanel.querySelectorAll('a[href], button, input, textarea, [tabindex]:not([tabindex="-1"])');
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    }
+  });
 }
 
 export function updateInteraction(time) {
@@ -127,12 +144,15 @@ function showOverlay(data) {
   if (!overlayPanel) overlayPanel = document.getElementById('overlay-panel');
   if (!overlayPanel) return;
   overlayActive = true;
+  overlayPanel.setAttribute('role', 'dialog');
+  overlayPanel.setAttribute('aria-modal', 'true');
+  overlayPanel.setAttribute('aria-labelledby', 'overlay-title');
   overlayPanel.style.display = 'flex';
   overlayPanel.innerHTML = `
     <div class="overlay-content">
       <div class="overlay-header" style="color: ${data.lightColorCSS}">
-        <span class="overlay-title">${data.name}</span>
-        <button class="overlay-close-btn" id="overlay-close-inner">&times;</button>
+        <span class="overlay-title" id="overlay-title">${data.name}</span>
+        <button class="overlay-close-btn" id="overlay-close-inner" tabindex="0">&times;</button>
       </div>
       <div class="overlay-body">
         <p>${data.description}</p>
@@ -150,12 +170,19 @@ function showOverlay(data) {
       if (e.target === overlayPanel) closeOverlay();
     });
   }
+
+  // After overlay is displayed, focus the close button
+  setTimeout(() => {
+    const closeBtn = overlayPanel.querySelector('.overlay-close-btn') || overlayPanel.querySelector('button');
+    if (closeBtn) closeBtn.focus();
+  }, 100);
 }
 
 export function closeOverlay() {
   if (!overlayPanel) overlayPanel = document.getElementById('overlay-panel');
   if (!overlayPanel) return;
   overlayActive = false;
+  overlayPanel.removeAttribute('aria-modal');
   overlayPanel.style.display = 'none';
 }
 

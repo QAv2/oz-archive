@@ -60,3 +60,7 @@
   );
   pointer-events: none;
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .blink-cursor::after { animation: none; opacity: 1; }
+}
