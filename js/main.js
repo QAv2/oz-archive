@@ -94,6 +94,7 @@ async function init() {
 
   // ─── Post-door: diverge by mode ─────────────────────────────────
   crtBtn.style.display = 'block';
+  document.getElementById('bmc-btn').style.display = 'block';
 
   if (isMobileMode) {
     // Start tour mode

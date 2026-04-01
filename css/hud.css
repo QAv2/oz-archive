@@ -228,6 +228,35 @@
   50% { opacity: 0.6; }
 }
 
+/* BMC button — top-left, mirrors curator top-right */
+#bmc-btn {
+  position: fixed;
+  top: 1rem;
+  left: 1rem;
+  z-index: 25;
+  background: rgba(10, 10, 15, 0.8);
+  border: 1px solid rgba(255, 187, 36, 0.4);
+  color: #fbbf24;
+  font-family: 'Press Start 2P', 'Courier New', monospace;
+  font-size: 9px;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+  display: none;
+  text-decoration: none;
+  text-shadow: 0 0 6px rgba(255, 187, 36, 0.3);
+  transition: border-color 0.2s, background 0.2s;
+}
+
+#bmc-btn:hover {
+  border-color: #fbbf24;
+  background: rgba(255, 187, 36, 0.1);
+}
+
+#bmc-btn:focus-visible {
+  outline: 2px solid #fbbf24;
+  outline-offset: 2px;
+}
+
 /* CRT toggle button */
 #crt-toggle {
   position: fixed;
@@ -367,6 +396,14 @@
   margin-top: 0.5rem;
   font-size: clamp(7px, 1.4vw, 9px);
   opacity: 0.6;
+}
+
+/* On mobile (tour mode), shift BMC right to avoid overlapping tour back button */
+@media (pointer: coarse) {
+  #bmc-btn {
+    left: auto;
+    right: 5.5rem;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
