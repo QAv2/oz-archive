@@ -29,6 +29,8 @@ function loadTiled(path, repeatX, repeatY, srgb = true) {
 }
 
 // Shared materials (one instance per surface type, fixed repeat)
+// Mobile flag stored at module level after buildScene sets it
+let mobileMode = false;
 let wallMat = null;
 let floorMat = null;
 let ceilingMat = null;
@@ -42,8 +44,8 @@ function getWallMaterial() {
       normalScale: new THREE.Vector2(0.8, 0.8),
       roughness: 0.85,
       metalness: 0.0,
-      emissive: COLORS.wallEmissive,
-      emissiveIntensity: 0.05,
+      emissive: mobileMode ? 0x4a2810 : COLORS.wallEmissive,
+      emissiveIntensity: mobileMode ? 0.5 : 0.05,
     });
   }
   return wallMat;
@@ -58,8 +60,8 @@ function getFloorMaterial() {
       normalScale: new THREE.Vector2(1.0, 1.0),
       roughness: 0.9,
       metalness: 0.0,
-      emissive: 0x050505,
-      emissiveIntensity: 0.02,
+      emissive: mobileMode ? 0x3a1c08 : 0x050505,
+      emissiveIntensity: mobileMode ? 0.4 : 0.02,
       side: THREE.DoubleSide,
     });
   }
@@ -75,8 +77,8 @@ function getCeilingMaterial() {
       normalScale: new THREE.Vector2(0.6, 0.6),
       roughness: 0.8,
       metalness: 0.0,
-      emissive: 0x030303,
-      emissiveIntensity: 0.02,
+      emissive: mobileMode ? 0x4a2810 : 0x030303,
+      emissiveIntensity: mobileMode ? 0.45 : 0.02,
       side: THREE.DoubleSide,
     });
   }
@@ -125,6 +127,8 @@ function addCeiling(scene, width, depth, x, z, color = COLORS.ceiling) {
 }
 
 export function buildScene(scene, { mobile = false } = {}) {
+  mobileMode = mobile;
+
   // ─── Fog (light — just enough depth cue, not darkness) ───────────
   scene.fog = new THREE.FogExp2(COLORS.fog, 0.020);
   scene.background = new THREE.Color(COLORS.void);
