@@ -46,12 +46,12 @@ async function init() {
 
   // Scene
   scene = new THREE.Scene();
-  buildScene(scene);
+  buildScene(scene, { mobile: isMobileMode });
   buildExhibits(scene);
   initLightmap(scene);
 
-  // Mobile performance path — swap to flat materials, kill dynamic lights
-  if (isMobileMode) enableLightmapMode();
+  // Mobile performance path — disabled for now (panoramas need rework)
+  // if (isMobileMode) enableLightmapMode();
 
   // Camera setup — desktop vs mobile
   let cam;

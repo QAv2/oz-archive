@@ -124,25 +124,43 @@ function addCeiling(scene, width, depth, x, z, color = COLORS.ceiling) {
   return mesh;
 }
 
-export function buildScene(scene) {
+export function buildScene(scene, { mobile = false } = {}) {
   // ─── Fog (light — just enough depth cue, not darkness) ───────────
   scene.fog = new THREE.FogExp2(COLORS.fog, 0.020);
   scene.background = new THREE.Color(COLORS.void);
 
   // ─── Lighting — atmospheric vault ─────────────────────────────────
-  const ambient = new THREE.AmbientLight(0x1a1814, 0.6);
+  // Mobile: warmer tones + stronger fill to approximate torchlight without 36 PointLights
+  const ambient = new THREE.AmbientLight(
+    mobile ? 0x201408 : 0x1a1814,   // mobile: orange-shifted
+    mobile ? 1.4 : 0.6
+  );
 
   // Hemisphere fill — warm sky, cool ground
-  const hemi = new THREE.HemisphereLight(0xddccaa, 0x333322, 0.8);
+  const hemi = new THREE.HemisphereLight(
+    mobile ? 0xeebb88 : 0xddccaa,   // mobile: warmer sky
+    mobile ? 0x332211 : 0x333322,   // mobile: warmer ground
+    mobile ? 1.6 : 0.8
+  );
 
-  // Soft central overhead — not blinding, just enough to read the atrium
-  const centerLight = new THREE.PointLight(0xffe8cc, 4.0, 40, 1);
+  // Soft central overhead
+  const centerLight = new THREE.PointLight(0xffe8cc, mobile ? 6.0 : 4.0, mobile ? 60 : 40, 1);
   centerLight.position.set(0, CEILING_HEIGHT - 0.3, 0);
 
   scene.add(ambient);
   scene.add(hemi);
   scene.add(centerLight);
-  scene.add(ambient);
+
+  // ─── Mobile alcove fill lights (replaces 36 torches) ───────────────
+  if (mobile) {
+    for (let i = 0; i < NUM_SPOKES; i++) {
+      const angle = (i * Math.PI * 2) / NUM_SPOKES;
+      const aDist = ATRIUM_RADIUS + CORRIDOR_LENGTH + ALCOVE_DEPTH * 0.5;
+      const alcoveFill = new THREE.PointLight(0xffaa66, 5.0, 20, 1.5);
+      alcoveFill.position.set(Math.sin(angle) * aDist, CEILING_HEIGHT - 0.3, Math.cos(angle) * aDist);
+      scene.add(alcoveFill);
+    }
+  }
 
   // ─── Central Atrium Floor & Ceiling ───────────────────────────────
   const floorGeo = new THREE.CircleGeometry(ATRIUM_RADIUS + 1, 6);
@@ -191,6 +209,8 @@ export function buildScene(scene) {
   }
 
   // ─── Corridor Torches (two per corridor, wall-mounted) ────────────
+  // Skipped on mobile — 36 PointLights + 108 sconce meshes kill mobile GPUs
+  if (!mobile) {
   const bracketMat = new THREE.MeshStandardMaterial({
     color: 0x2a2a2a, roughness: 0.9, metalness: 0.3,
   });
@@ -294,6 +314,7 @@ export function buildScene(scene) {
       scene.add(alcoveSconce);
     }
   }
+  } // end !mobile torch block
 
   // ─── Per-Exhibit Colored Accent Lights ─────────────────────────────
   for (let i = 0; i < EXHIBITS.length; i++) {
