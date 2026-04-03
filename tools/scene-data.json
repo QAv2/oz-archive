@@ -1,0 +1,3105 @@
+{
+  "config": {
+    "ATRIUM_RADIUS": 6,
+    "CEILING_HEIGHT": 3.5,
+    "CORRIDOR_LENGTH": 8,
+    "CORRIDOR_WIDTH": 4,
+    "WALL_THICKNESS": 0.3,
+    "ALCOVE_DEPTH": 6,
+    "ALCOVE_WIDTH": 6,
+    "NUM_SPOKES": 6
+  },
+  "meshes": [
+    {
+      "name": "atrium_floor",
+      "room": "atrium",
+      "materialType": "floor",
+      "geoType": "circle",
+      "geoArgs": [
+        7,
+        6
+      ],
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        0.5236
+      ]
+    },
+    {
+      "name": "atrium_ceiling",
+      "room": "atrium",
+      "materialType": "ceiling",
+      "geoType": "circle",
+      "geoArgs": [
+        7,
+        6
+      ],
+      "position": [
+        0,
+        3.5,
+        0
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        0.5236
+      ]
+    },
+    {
+      "name": "atrium_wall_0_L",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        2.7321,
+        1.75,
+        6
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_0_R",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -2.7321,
+        1.75,
+        6
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_1_L",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        6.5622,
+        1.75,
+        0.634
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_1_R",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        3.8301,
+        1.75,
+        5.366
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_2_L",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        3.8301,
+        1.75,
+        -5.366
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_2_R",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        6.5622,
+        1.75,
+        -0.634
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_3_L",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -2.7321,
+        1.75,
+        -6
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_3_R",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        2.7321,
+        1.75,
+        -6
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_4_L",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -6.5622,
+        1.75,
+        -0.634
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_4_R",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -3.8301,
+        1.75,
+        -5.366
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_5_L",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -3.8301,
+        1.75,
+        5.366
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    },
+    {
+      "name": "atrium_wall_5_R",
+      "room": "atrium",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.4641016151377544,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -6.5622,
+        1.75,
+        0.634
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    },
+    {
+      "name": "corridor_0_floor",
+      "room": "corridor_0",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        0,
+        0,
+        10
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "corridor_0_ceiling",
+      "room": "corridor_0",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        0,
+        3.5,
+        10
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "corridor_0_wall_L",
+      "room": "corridor_0",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        2.15,
+        1.75,
+        10
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "corridor_0_wall_R",
+      "room": "corridor_0",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        -2.15,
+        1.75,
+        10
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "alcove_0_floor",
+      "room": "alcove_0",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        0,
+        0,
+        17
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "alcove_0_ceiling",
+      "room": "alcove_0",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        0,
+        3.5,
+        17
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "alcove_0_wall_back",
+      "room": "alcove_0",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        6,
+        3.5,
+        0.3
+      ],
+      "position": [
+        0,
+        1.75,
+        20
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "alcove_0_wall_L",
+      "room": "alcove_0",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        3.15,
+        1.75,
+        17
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "alcove_0_wall_R",
+      "room": "alcove_0",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        -3.15,
+        1.75,
+        17
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "alcove_0_wing_L",
+      "room": "alcove_0",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        2.5,
+        1.75,
+        14
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "alcove_0_wing_R",
+      "room": "alcove_0",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -2.5,
+        1.75,
+        14
+      ],
+      "rotation": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "corridor_1_floor",
+      "room": "corridor_1",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        8.6603,
+        0,
+        5
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        1.0472
+      ]
+    },
+    {
+      "name": "corridor_1_ceiling",
+      "room": "corridor_1",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        8.6603,
+        3.5,
+        5
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        1.0472
+      ]
+    },
+    {
+      "name": "corridor_1_wall_L",
+      "room": "corridor_1",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        9.7353,
+        1.75,
+        3.138
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "corridor_1_wall_R",
+      "room": "corridor_1",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        7.5853,
+        1.75,
+        6.862
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "alcove_1_floor",
+      "room": "alcove_1",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        14.7224,
+        0,
+        8.5
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        1.0472
+      ]
+    },
+    {
+      "name": "alcove_1_ceiling",
+      "room": "alcove_1",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        14.7224,
+        3.5,
+        8.5
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        1.0472
+      ]
+    },
+    {
+      "name": "alcove_1_wall_back",
+      "room": "alcove_1",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        6,
+        3.5,
+        0.3
+      ],
+      "position": [
+        17.3205,
+        1.75,
+        10
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "alcove_1_wall_L",
+      "room": "alcove_1",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        16.2974,
+        1.75,
+        5.772
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "alcove_1_wall_R",
+      "room": "alcove_1",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        13.1474,
+        1.75,
+        11.228
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "alcove_1_wing_L",
+      "room": "alcove_1",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        13.3744,
+        1.75,
+        4.8349
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "alcove_1_wing_R",
+      "room": "alcove_1",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        10.8744,
+        1.75,
+        9.1651
+      ],
+      "rotation": [
+        0,
+        1.0472,
+        0
+      ]
+    },
+    {
+      "name": "corridor_2_floor",
+      "room": "corridor_2",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        8.6603,
+        0,
+        -5
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        2.0944
+      ]
+    },
+    {
+      "name": "corridor_2_ceiling",
+      "room": "corridor_2",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        8.6603,
+        3.5,
+        -5
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        2.0944
+      ]
+    },
+    {
+      "name": "corridor_2_wall_L",
+      "room": "corridor_2",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        7.5853,
+        1.75,
+        -6.862
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "corridor_2_wall_R",
+      "room": "corridor_2",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        9.7353,
+        1.75,
+        -3.138
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "alcove_2_floor",
+      "room": "alcove_2",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        14.7224,
+        0,
+        -8.5
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        2.0944
+      ]
+    },
+    {
+      "name": "alcove_2_ceiling",
+      "room": "alcove_2",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        14.7224,
+        3.5,
+        -8.5
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        2.0944
+      ]
+    },
+    {
+      "name": "alcove_2_wall_back",
+      "room": "alcove_2",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        6,
+        3.5,
+        0.3
+      ],
+      "position": [
+        17.3205,
+        1.75,
+        -10
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "alcove_2_wall_L",
+      "room": "alcove_2",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        13.1474,
+        1.75,
+        -11.228
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "alcove_2_wall_R",
+      "room": "alcove_2",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        16.2974,
+        1.75,
+        -5.772
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "alcove_2_wing_L",
+      "room": "alcove_2",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        10.8744,
+        1.75,
+        -9.1651
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "alcove_2_wing_R",
+      "room": "alcove_2",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        13.3744,
+        1.75,
+        -4.8349
+      ],
+      "rotation": [
+        0,
+        2.0944,
+        0
+      ]
+    },
+    {
+      "name": "corridor_3_floor",
+      "room": "corridor_3",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        0,
+        0,
+        -10
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        3.1416
+      ]
+    },
+    {
+      "name": "corridor_3_ceiling",
+      "room": "corridor_3",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        0,
+        3.5,
+        -10
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        3.1416
+      ]
+    },
+    {
+      "name": "corridor_3_wall_L",
+      "room": "corridor_3",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        -2.15,
+        1.75,
+        -10
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "corridor_3_wall_R",
+      "room": "corridor_3",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        2.15,
+        1.75,
+        -10
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "alcove_3_floor",
+      "room": "alcove_3",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        0,
+        0,
+        -17
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        3.1416
+      ]
+    },
+    {
+      "name": "alcove_3_ceiling",
+      "room": "alcove_3",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        0,
+        3.5,
+        -17
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        3.1416
+      ]
+    },
+    {
+      "name": "alcove_3_wall_back",
+      "room": "alcove_3",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        6,
+        3.5,
+        0.3
+      ],
+      "position": [
+        0,
+        1.75,
+        -20
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "alcove_3_wall_L",
+      "room": "alcove_3",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        -3.15,
+        1.75,
+        -17
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "alcove_3_wall_R",
+      "room": "alcove_3",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        3.15,
+        1.75,
+        -17
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "alcove_3_wing_L",
+      "room": "alcove_3",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -2.5,
+        1.75,
+        -14
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "alcove_3_wing_R",
+      "room": "alcove_3",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        2.5,
+        1.75,
+        -14
+      ],
+      "rotation": [
+        0,
+        3.1416,
+        0
+      ]
+    },
+    {
+      "name": "corridor_4_floor",
+      "room": "corridor_4",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        -8.6603,
+        0,
+        -5
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        4.1888
+      ]
+    },
+    {
+      "name": "corridor_4_ceiling",
+      "room": "corridor_4",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        -8.6603,
+        3.5,
+        -5
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        4.1888
+      ]
+    },
+    {
+      "name": "corridor_4_wall_L",
+      "room": "corridor_4",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        -9.7353,
+        1.75,
+        -3.138
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "corridor_4_wall_R",
+      "room": "corridor_4",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        -7.5853,
+        1.75,
+        -6.862
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "alcove_4_floor",
+      "room": "alcove_4",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        -14.7224,
+        0,
+        -8.5
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        4.1888
+      ]
+    },
+    {
+      "name": "alcove_4_ceiling",
+      "room": "alcove_4",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        -14.7224,
+        3.5,
+        -8.5
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        4.1888
+      ]
+    },
+    {
+      "name": "alcove_4_wall_back",
+      "room": "alcove_4",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        6,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -17.3205,
+        1.75,
+        -10
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "alcove_4_wall_L",
+      "room": "alcove_4",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        -16.2974,
+        1.75,
+        -5.772
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "alcove_4_wall_R",
+      "room": "alcove_4",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        -13.1474,
+        1.75,
+        -11.228
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "alcove_4_wing_L",
+      "room": "alcove_4",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -13.3744,
+        1.75,
+        -4.8349
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "alcove_4_wing_R",
+      "room": "alcove_4",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -10.8744,
+        1.75,
+        -9.1651
+      ],
+      "rotation": [
+        0,
+        4.1888,
+        0
+      ]
+    },
+    {
+      "name": "corridor_5_floor",
+      "room": "corridor_5",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        -8.6603,
+        0,
+        5
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        5.236
+      ]
+    },
+    {
+      "name": "corridor_5_ceiling",
+      "room": "corridor_5",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        4,
+        8
+      ],
+      "position": [
+        -8.6603,
+        3.5,
+        5
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        5.236
+      ]
+    },
+    {
+      "name": "corridor_5_wall_L",
+      "room": "corridor_5",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        -7.5853,
+        1.75,
+        6.862
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    },
+    {
+      "name": "corridor_5_wall_R",
+      "room": "corridor_5",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        8
+      ],
+      "position": [
+        -9.7353,
+        1.75,
+        3.138
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    },
+    {
+      "name": "alcove_5_floor",
+      "room": "alcove_5",
+      "materialType": "floor",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        -14.7224,
+        0,
+        8.5
+      ],
+      "rotation": [
+        -1.5708,
+        0,
+        5.236
+      ]
+    },
+    {
+      "name": "alcove_5_ceiling",
+      "room": "alcove_5",
+      "materialType": "ceiling",
+      "geoType": "plane",
+      "geoArgs": [
+        6,
+        6
+      ],
+      "position": [
+        -14.7224,
+        3.5,
+        8.5
+      ],
+      "rotation": [
+        1.5708,
+        0,
+        5.236
+      ]
+    },
+    {
+      "name": "alcove_5_wall_back",
+      "room": "alcove_5",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        6,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -17.3205,
+        1.75,
+        10
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    },
+    {
+      "name": "alcove_5_wall_L",
+      "room": "alcove_5",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        -13.1474,
+        1.75,
+        11.228
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    },
+    {
+      "name": "alcove_5_wall_R",
+      "room": "alcove_5",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        0.3,
+        3.5,
+        6
+      ],
+      "position": [
+        -16.2974,
+        1.75,
+        5.772
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    },
+    {
+      "name": "alcove_5_wing_L",
+      "room": "alcove_5",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -10.8744,
+        1.75,
+        9.1651
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    },
+    {
+      "name": "alcove_5_wing_R",
+      "room": "alcove_5",
+      "materialType": "wall",
+      "geoType": "box",
+      "geoArgs": [
+        1.3,
+        3.5,
+        0.3
+      ],
+      "position": [
+        -13.3744,
+        1.75,
+        4.8349
+      ],
+      "rotation": [
+        0,
+        5.236,
+        0
+      ]
+    }
+  ],
+  "lights": [
+    {
+      "type": "ambient",
+      "color": "#1a1814",
+      "intensity": 0.6,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "room": "atrium"
+    },
+    {
+      "type": "hemisphere",
+      "color": "#ddccaa",
+      "groundColor": "#333322",
+      "intensity": 0.8,
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "room": "atrium"
+    },
+    {
+      "type": "point",
+      "color": "#ffe8cc",
+      "intensity": 4,
+      "distance": 40,
+      "decay": 1,
+      "position": [
+        0,
+        3.2,
+        0
+      ],
+      "room": "atrium"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        1.85,
+        2.9,
+        8.4
+      ],
+      "room": "corridor_0"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -1.85,
+        2.9,
+        8.4
+      ],
+      "room": "corridor_0"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        1.85,
+        2.9,
+        11.6
+      ],
+      "room": "corridor_0"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -1.85,
+        2.9,
+        11.6
+      ],
+      "room": "corridor_0"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        2.85,
+        2.9,
+        18.2
+      ],
+      "room": "alcove_0"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        -2.85,
+        2.9,
+        18.2
+      ],
+      "room": "alcove_0"
+    },
+    {
+      "type": "point",
+      "color": "#34d399",
+      "intensity": 3.5,
+      "distance": 25,
+      "decay": 1.5,
+      "position": [
+        0,
+        3,
+        17
+      ],
+      "room": "alcove_0"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        8.1996,
+        2.9,
+        2.5979
+      ],
+      "room": "corridor_1"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        6.3496,
+        2.9,
+        5.8021
+      ],
+      "room": "corridor_1"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        10.9709,
+        2.9,
+        4.1979
+      ],
+      "room": "corridor_1"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        9.1209,
+        2.9,
+        7.4021
+      ],
+      "room": "corridor_1"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        17.1867,
+        2.9,
+        6.6318
+      ],
+      "room": "alcove_1"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        14.3367,
+        2.9,
+        11.5682
+      ],
+      "room": "alcove_1"
+    },
+    {
+      "type": "point",
+      "color": "#fbbf24",
+      "intensity": 3.5,
+      "distance": 25,
+      "decay": 1.5,
+      "position": [
+        14.7224,
+        3,
+        8.5
+      ],
+      "room": "alcove_1"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        6.3496,
+        2.9,
+        -5.8021
+      ],
+      "room": "corridor_2"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        8.1996,
+        2.9,
+        -2.5979
+      ],
+      "room": "corridor_2"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        9.1209,
+        2.9,
+        -7.4021
+      ],
+      "room": "corridor_2"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        10.9709,
+        2.9,
+        -4.1979
+      ],
+      "room": "corridor_2"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        14.3367,
+        2.9,
+        -11.5682
+      ],
+      "room": "alcove_2"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        17.1867,
+        2.9,
+        -6.6318
+      ],
+      "room": "alcove_2"
+    },
+    {
+      "type": "point",
+      "color": "#4488ff",
+      "intensity": 3.5,
+      "distance": 25,
+      "decay": 1.5,
+      "position": [
+        14.7224,
+        3,
+        -8.5
+      ],
+      "room": "alcove_2"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -1.85,
+        2.9,
+        -8.4
+      ],
+      "room": "corridor_3"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        1.85,
+        2.9,
+        -8.4
+      ],
+      "room": "corridor_3"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -1.85,
+        2.9,
+        -11.6
+      ],
+      "room": "corridor_3"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        1.85,
+        2.9,
+        -11.6
+      ],
+      "room": "corridor_3"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        -2.85,
+        2.9,
+        -18.2
+      ],
+      "room": "alcove_3"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        2.85,
+        2.9,
+        -18.2
+      ],
+      "room": "alcove_3"
+    },
+    {
+      "type": "point",
+      "color": "#aa44ff",
+      "intensity": 3.5,
+      "distance": 25,
+      "decay": 1.5,
+      "position": [
+        0,
+        3,
+        -17
+      ],
+      "room": "alcove_3"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -8.1996,
+        2.9,
+        -2.5979
+      ],
+      "room": "corridor_4"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -6.3496,
+        2.9,
+        -5.8021
+      ],
+      "room": "corridor_4"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -10.9709,
+        2.9,
+        -4.1979
+      ],
+      "room": "corridor_4"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -9.1209,
+        2.9,
+        -7.4021
+      ],
+      "room": "corridor_4"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        -17.1867,
+        2.9,
+        -6.6318
+      ],
+      "room": "alcove_4"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        -14.3367,
+        2.9,
+        -11.5682
+      ],
+      "room": "alcove_4"
+    },
+    {
+      "type": "point",
+      "color": "#ff4444",
+      "intensity": 3.5,
+      "distance": 25,
+      "decay": 1.5,
+      "position": [
+        -14.7224,
+        3,
+        -8.5
+      ],
+      "room": "alcove_4"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -6.3496,
+        2.9,
+        5.8021
+      ],
+      "room": "corridor_5"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -8.1996,
+        2.9,
+        2.5979
+      ],
+      "room": "corridor_5"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -9.1209,
+        2.9,
+        7.4021
+      ],
+      "room": "corridor_5"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 5,
+      "distance": 20,
+      "decay": 1.5,
+      "position": [
+        -10.9709,
+        2.9,
+        4.1979
+      ],
+      "room": "corridor_5"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        -14.3367,
+        2.9,
+        11.5682
+      ],
+      "room": "alcove_5"
+    },
+    {
+      "type": "point",
+      "color": "#ff8844",
+      "intensity": 4,
+      "distance": 15,
+      "decay": 1.5,
+      "position": [
+        -17.1867,
+        2.9,
+        6.6318
+      ],
+      "room": "alcove_5"
+    },
+    {
+      "type": "point",
+      "color": "#40c8ff",
+      "intensity": 3.5,
+      "distance": 25,
+      "decay": 1.5,
+      "position": [
+        -14.7224,
+        3,
+        8.5
+      ],
+      "room": "alcove_5"
+    }
+  ],
+  "sconces": [
+    {
+      "position": [
+        1.85,
+        2.9,
+        8.4
+      ],
+      "rotationY": 3.1416,
+      "room": "corridor_0"
+    },
+    {
+      "position": [
+        -1.85,
+        2.9,
+        8.4
+      ],
+      "rotationY": 0,
+      "room": "corridor_0"
+    },
+    {
+      "position": [
+        1.85,
+        2.9,
+        11.6
+      ],
+      "rotationY": 3.1416,
+      "room": "corridor_0"
+    },
+    {
+      "position": [
+        -1.85,
+        2.9,
+        11.6
+      ],
+      "rotationY": 0,
+      "room": "corridor_0"
+    },
+    {
+      "position": [
+        2.85,
+        2.9,
+        18.2
+      ],
+      "rotationY": 3.1416,
+      "room": "alcove_0"
+    },
+    {
+      "position": [
+        -2.85,
+        2.9,
+        18.2
+      ],
+      "rotationY": 0,
+      "room": "alcove_0"
+    },
+    {
+      "position": [
+        8.1996,
+        2.9,
+        2.5979
+      ],
+      "rotationY": 4.1888,
+      "room": "corridor_1"
+    },
+    {
+      "position": [
+        6.3496,
+        2.9,
+        5.8021
+      ],
+      "rotationY": 1.0472,
+      "room": "corridor_1"
+    },
+    {
+      "position": [
+        10.9709,
+        2.9,
+        4.1979
+      ],
+      "rotationY": 4.1888,
+      "room": "corridor_1"
+    },
+    {
+      "position": [
+        9.1209,
+        2.9,
+        7.4021
+      ],
+      "rotationY": 1.0472,
+      "room": "corridor_1"
+    },
+    {
+      "position": [
+        17.1867,
+        2.9,
+        6.6318
+      ],
+      "rotationY": 4.1888,
+      "room": "alcove_1"
+    },
+    {
+      "position": [
+        14.3367,
+        2.9,
+        11.5682
+      ],
+      "rotationY": 1.0472,
+      "room": "alcove_1"
+    },
+    {
+      "position": [
+        6.3496,
+        2.9,
+        -5.8021
+      ],
+      "rotationY": 5.236,
+      "room": "corridor_2"
+    },
+    {
+      "position": [
+        8.1996,
+        2.9,
+        -2.5979
+      ],
+      "rotationY": 2.0944,
+      "room": "corridor_2"
+    },
+    {
+      "position": [
+        9.1209,
+        2.9,
+        -7.4021
+      ],
+      "rotationY": 5.236,
+      "room": "corridor_2"
+    },
+    {
+      "position": [
+        10.9709,
+        2.9,
+        -4.1979
+      ],
+      "rotationY": 2.0944,
+      "room": "corridor_2"
+    },
+    {
+      "position": [
+        14.3367,
+        2.9,
+        -11.5682
+      ],
+      "rotationY": 5.236,
+      "room": "alcove_2"
+    },
+    {
+      "position": [
+        17.1867,
+        2.9,
+        -6.6318
+      ],
+      "rotationY": 2.0944,
+      "room": "alcove_2"
+    },
+    {
+      "position": [
+        -1.85,
+        2.9,
+        -8.4
+      ],
+      "rotationY": 6.2832,
+      "room": "corridor_3"
+    },
+    {
+      "position": [
+        1.85,
+        2.9,
+        -8.4
+      ],
+      "rotationY": 3.1416,
+      "room": "corridor_3"
+    },
+    {
+      "position": [
+        -1.85,
+        2.9,
+        -11.6
+      ],
+      "rotationY": 6.2832,
+      "room": "corridor_3"
+    },
+    {
+      "position": [
+        1.85,
+        2.9,
+        -11.6
+      ],
+      "rotationY": 3.1416,
+      "room": "corridor_3"
+    },
+    {
+      "position": [
+        -2.85,
+        2.9,
+        -18.2
+      ],
+      "rotationY": 6.2832,
+      "room": "alcove_3"
+    },
+    {
+      "position": [
+        2.85,
+        2.9,
+        -18.2
+      ],
+      "rotationY": 3.1416,
+      "room": "alcove_3"
+    },
+    {
+      "position": [
+        -8.1996,
+        2.9,
+        -2.5979
+      ],
+      "rotationY": 7.3304,
+      "room": "corridor_4"
+    },
+    {
+      "position": [
+        -6.3496,
+        2.9,
+        -5.8021
+      ],
+      "rotationY": 4.1888,
+      "room": "corridor_4"
+    },
+    {
+      "position": [
+        -10.9709,
+        2.9,
+        -4.1979
+      ],
+      "rotationY": 7.3304,
+      "room": "corridor_4"
+    },
+    {
+      "position": [
+        -9.1209,
+        2.9,
+        -7.4021
+      ],
+      "rotationY": 4.1888,
+      "room": "corridor_4"
+    },
+    {
+      "position": [
+        -17.1867,
+        2.9,
+        -6.6318
+      ],
+      "rotationY": 7.3304,
+      "room": "alcove_4"
+    },
+    {
+      "position": [
+        -14.3367,
+        2.9,
+        -11.5682
+      ],
+      "rotationY": 4.1888,
+      "room": "alcove_4"
+    },
+    {
+      "position": [
+        -6.3496,
+        2.9,
+        5.8021
+      ],
+      "rotationY": 8.3776,
+      "room": "corridor_5"
+    },
+    {
+      "position": [
+        -8.1996,
+        2.9,
+        2.5979
+      ],
+      "rotationY": 5.236,
+      "room": "corridor_5"
+    },
+    {
+      "position": [
+        -9.1209,
+        2.9,
+        7.4021
+      ],
+      "rotationY": 8.3776,
+      "room": "corridor_5"
+    },
+    {
+      "position": [
+        -10.9709,
+        2.9,
+        4.1979
+      ],
+      "rotationY": 5.236,
+      "room": "corridor_5"
+    },
+    {
+      "position": [
+        -14.3367,
+        2.9,
+        11.5682
+      ],
+      "rotationY": 8.3776,
+      "room": "alcove_5"
+    },
+    {
+      "position": [
+        -17.1867,
+        2.9,
+        6.6318
+      ],
+      "rotationY": 5.236,
+      "room": "alcove_5"
+    }
+  ],
+  "cameras": [
+    {
+      "name": "atrium",
+      "position": [
+        0,
+        1.7,
+        0
+      ],
+      "lookAt": [
+        0,
+        1.7,
+        1
+      ]
+    },
+    {
+      "name": "alcove_0_disclosure",
+      "position": [
+        0,
+        1.7,
+        16
+      ],
+      "lookAt": [
+        0,
+        1.7,
+        17
+      ]
+    },
+    {
+      "name": "alcove_1_qa",
+      "position": [
+        13.8564,
+        1.7,
+        8
+      ],
+      "lookAt": [
+        14.7224,
+        1.7,
+        8.5
+      ]
+    },
+    {
+      "name": "alcove_2_intel",
+      "position": [
+        13.8564,
+        1.7,
+        -8
+      ],
+      "lookAt": [
+        14.7224,
+        1.7,
+        -8.5
+      ]
+    },
+    {
+      "name": "alcove_3_physics",
+      "position": [
+        0,
+        1.7,
+        -16
+      ],
+      "lookAt": [
+        0,
+        1.7,
+        -17
+      ]
+    },
+    {
+      "name": "alcove_4_youtube",
+      "position": [
+        -13.8564,
+        1.7,
+        -8
+      ],
+      "lookAt": [
+        -14.7224,
+        1.7,
+        -8.5
+      ]
+    },
+    {
+      "name": "alcove_5_iceberg",
+      "position": [
+        -13.8564,
+        1.7,
+        8
+      ],
+      "lookAt": [
+        -14.7224,
+        1.7,
+        8.5
+      ]
+    }
+  ],
+  "collisions": [
+    {
+      "cx": 2.7321,
+      "cz": 6,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": -2.7321,
+      "cz": 6,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": 6.5622,
+      "cz": 0.634,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 3.8301,
+      "cz": 5.366,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 3.8301,
+      "cz": -5.366,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": 6.5622,
+      "cz": -0.634,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -2.7321,
+      "cz": -6,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": 2.7321,
+      "cz": -6,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": -6.5622,
+      "cz": -0.634,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -3.8301,
+      "cz": -5.366,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -3.8301,
+      "cz": 5.366,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": -6.5622,
+      "cz": 0.634,
+      "hw": 0.7321,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 2.15,
+      "cz": 10,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": -2.15,
+      "cz": 10,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": 0,
+      "cz": 20,
+      "hw": 3,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": 3.15,
+      "cz": 17,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": -3.15,
+      "cz": 17,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": 2.5,
+      "cz": 14,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": -2.5,
+      "cz": 14,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": 1
+    },
+    {
+      "cx": 9.7353,
+      "cz": 3.138,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 7.5853,
+      "cz": 6.862,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 17.3205,
+      "cz": 10,
+      "hw": 3,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 16.2974,
+      "cz": 5.772,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 13.1474,
+      "cz": 11.228,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 13.3744,
+      "cz": 4.8349,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 10.8744,
+      "cz": 9.1651,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": 7.5853,
+      "cz": -6.862,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": 9.7353,
+      "cz": -3.138,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": 17.3205,
+      "cz": -10,
+      "hw": 3,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": 13.1474,
+      "cz": -11.228,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": 16.2974,
+      "cz": -5.772,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": 10.8744,
+      "cz": -9.1651,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": 13.3744,
+      "cz": -4.8349,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": 0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -2.15,
+      "cz": -10,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": 2.15,
+      "cz": -10,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": 0,
+      "cz": -20,
+      "hw": 3,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": -3.15,
+      "cz": -17,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": 3.15,
+      "cz": -17,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": -2.5,
+      "cz": -14,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": 2.5,
+      "cz": -14,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": 0,
+      "cosA": -1
+    },
+    {
+      "cx": -9.7353,
+      "cz": -3.138,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -7.5853,
+      "cz": -6.862,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -17.3205,
+      "cz": -10,
+      "hw": 3,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -16.2974,
+      "cz": -5.772,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -13.1474,
+      "cz": -11.228,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -13.3744,
+      "cz": -4.8349,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -10.8744,
+      "cz": -9.1651,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": -0.5
+    },
+    {
+      "cx": -7.5853,
+      "cz": 6.862,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": -0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": -9.7353,
+      "cz": 3.138,
+      "hw": 0.15,
+      "hd": 4,
+      "sinA": -0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": -17.3205,
+      "cz": 10,
+      "hw": 3,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": -13.1474,
+      "cz": 11.228,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": -0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": -16.2974,
+      "cz": 5.772,
+      "hw": 0.15,
+      "hd": 3,
+      "sinA": -0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": -10.8744,
+      "cz": 9.1651,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": 0.5
+    },
+    {
+      "cx": -13.3744,
+      "cz": 4.8349,
+      "hw": 0.65,
+      "hd": 0.15,
+      "sinA": -0.866,
+      "cosA": 0.5
+    }
+  ]
+}

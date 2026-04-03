@@ -88,6 +88,7 @@ function addWall(scene, width, height, depth, x, y, z, rotY = 0, color = COLORS.
   const mesh = new THREE.Mesh(geo, getWallMaterial());
   mesh.position.set(x, y, z);
   mesh.rotation.y = rotY;
+  mesh.userData.archType = 'wall';
   scene.add(mesh);
   meshes.push(mesh);
 
@@ -106,6 +107,7 @@ function addFloor(scene, width, depth, x, z, color = COLORS.floor) {
   const mesh = new THREE.Mesh(geo, getFloorMaterial());
   mesh.rotation.x = -Math.PI / 2;
   mesh.position.set(x, 0, z);
+  mesh.userData.archType = 'floor';
   scene.add(mesh);
   meshes.push(mesh);
   return mesh;
@@ -116,6 +118,7 @@ function addCeiling(scene, width, depth, x, z, color = COLORS.ceiling) {
   const mesh = new THREE.Mesh(geo, getCeilingMaterial());
   mesh.rotation.x = Math.PI / 2;
   mesh.position.set(x, CEILING_HEIGHT, z);
+  mesh.userData.archType = 'ceiling';
   scene.add(mesh);
   meshes.push(mesh);
   return mesh;
@@ -147,6 +150,7 @@ export function buildScene(scene) {
   floorMesh.rotation.x = -Math.PI / 2;
   floorMesh.rotation.z = Math.PI / 6;
   floorMesh.position.y = 0;
+  floorMesh.userData.archType = 'floor';
   scene.add(floorMesh);
   meshes.push(floorMesh);
 
@@ -155,6 +159,7 @@ export function buildScene(scene) {
   ceilMesh.rotation.x = Math.PI / 2;
   ceilMesh.rotation.z = Math.PI / 6;
   ceilMesh.position.y = CEILING_HEIGHT;
+  ceilMesh.userData.archType = 'ceiling';
   scene.add(ceilMesh);
   meshes.push(ceilMesh);
 
@@ -227,6 +232,7 @@ export function buildScene(scene) {
 
         // Sconce geometry
         const sconce = new THREE.Group();
+        sconce.userData.isSconce = true;
         sconce.position.set(tx, sconceY, tz);
         sconce.rotation.y = angle + (side > 0 ? Math.PI : 0);
 
@@ -269,6 +275,7 @@ export function buildScene(scene) {
       });
 
       const alcoveSconce = new THREE.Group();
+      alcoveSconce.userData.isSconce = true;
       alcoveSconce.position.set(ax, alcoveY, az);
       alcoveSconce.rotation.y = angle + (side > 0 ? Math.PI : 0);
 

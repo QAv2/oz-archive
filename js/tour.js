@@ -7,6 +7,7 @@ import {
 } from './config.js';
 import { exhibitObjects } from './exhibits.js';
 import { triggerExhibitAction, closeOverlay, isOverlayActive } from './interaction.js';
+import { setPanoramaStop } from './lightmap.js';
 
 // ─── Tour Camera ────────────────────────────────────────────────────
 let camera = null;
@@ -245,6 +246,7 @@ export function navigateTo(stopIndex) {
     pitch = Math.asin(-dir.y);
 
     currentStop = stopIndex;
+    setPanoramaStop(stopIndex);
     updateHotspotVisibility();
     updateHUD();
 

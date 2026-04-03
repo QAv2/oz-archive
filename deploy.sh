@@ -48,8 +48,13 @@ for f in fonts/*; do
 done
 
 # Upload textures
-for f in textures/*; do
-  upload "$f"
+for f in textures/*.jpg textures/*.png; do
+  [ -f "$f" ] && upload "$f"
+done
+
+# Upload panoramas
+for f in textures/pano/*.jpg; do
+  [ -f "$f" ] && upload "$f"
 done
 
 # Upload icons & social preview

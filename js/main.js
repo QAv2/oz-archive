@@ -10,6 +10,7 @@ import { initSkyPortal, updateSkyPortal } from './portal-sky.js';
 import { runBootSequence, hideBootScreen } from './boot.js';
 import { createComposer, updateCRT, renderComposer, startCRTWarmup } from './shaders/crt.js';
 import { initProxyChat, toggleProxyChat } from './proxychat.js';
+import { initLightmap, enableLightmapMode, toggleLightmapMode, isLightmapActive, adjustPanoRotation } from './lightmap.js';
 
 let renderer, scene, composer;
 const clock = new THREE.Clock();
@@ -47,6 +48,10 @@ async function init() {
   scene = new THREE.Scene();
   buildScene(scene);
   buildExhibits(scene);
+  initLightmap(scene);
+
+  // Mobile performance path — swap to flat materials, kill dynamic lights
+  if (isMobileMode) enableLightmapMode();
 
   // Camera setup — desktop vs mobile
   let cam;
@@ -136,9 +141,18 @@ async function init() {
     });
 
     // [B] key — open Buy Me a Coffee
+    // [L] key — toggle lightmap mode (preview mobile rendering path)
     document.addEventListener('keydown', (e) => {
-      if (e.code === 'KeyB' && !document.activeElement?.matches('input, textarea')) {
+      if (document.activeElement?.matches('input, textarea')) return;
+      if (e.code === 'KeyB') {
         window.open('https://buymeacoffee.com/joeyv23', '_blank');
+      } else if (e.code === 'KeyL') {
+        const on = toggleLightmapMode();
+        console.log(`Lightmap mode: ${on ? 'ON (mobile preview)' : 'OFF (full PBR)'}`);
+      } else if (e.code === 'BracketLeft') {
+        adjustPanoRotation(-Math.PI / 12);  // -15°
+      } else if (e.code === 'BracketRight') {
+        adjustPanoRotation(Math.PI / 12);   // +15°
       }
     });
   }
@@ -178,13 +192,15 @@ function animate() {
 
   updateExhibits(elapsed);
 
-  // Torch flicker — compound sine waves for organic warmth
-  for (const t of torchLights) {
-    const flick = 1.0
-      + Math.sin(elapsed * 6.0 + t.phase) * 0.08
-      + Math.sin(elapsed * 13.7 + t.phase * 2.3) * 0.04
-      + Math.sin(elapsed * 23.1 + t.phase * 0.7) * 0.02;
-    t.light.intensity = t.baseIntensity * flick;
+  // Torch flicker — compound sine waves for organic warmth (skip in lightmap mode)
+  if (!isLightmapActive()) {
+    for (const t of torchLights) {
+      const flick = 1.0
+        + Math.sin(elapsed * 6.0 + t.phase) * 0.08
+        + Math.sin(elapsed * 13.7 + t.phase * 2.3) * 0.04
+        + Math.sin(elapsed * 23.1 + t.phase * 0.7) * 0.02;
+      t.light.intensity = t.baseIntensity * flick;
+    }
   }
 
   updateCRT(elapsed);
