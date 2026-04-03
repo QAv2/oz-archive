@@ -24,27 +24,27 @@ export const EMISSIVE_PULSE_SPEED = 2;   // Hz
 
 // ─── Colors ─────────────────────────────────────────────────────────
 export const COLORS = {
-  void:         0x08080f,
-  walls:        0x5a5570,
-  wallEmissive: 0x2a2540,
-  floor:        0x484360,
-  ceiling:      0x6a6580,
+  void:         0x060608,    // near-black
+  walls:        0x3a3a42,    // dark stone grey
+  wallEmissive: 0x0a0a0e,    // near-zero emissive
+  floor:        0x2a2a30,    // dark slate
+  ceiling:      0x1a1a22,    // very dark
   termGreen:    0x00ff41,
   evidGreen:    0x34d399,
   evidAmber:    0xfbbf24,
   cyan:         0x0abdc6,
-  fog:          0x0c0b14,
-  ambient:      0x554840,
+  fog:          0x0a0f0a,    // dark grey-green
+  ambient:      0x1a1814,    // warm dark brown
 };
 
 export const CSS_COLORS = {
-  void:       '#08080f',
+  void:       '#060608',
   termGreen:  '#00ff41',
   evidGreen:  '#34d399',
   evidAmber:  '#fbbf24',
   cyan:       '#0abdc6',
   textPrimary:'rgba(255,255,255,0.92)',
-  walls:      '#5a5570',
+  walls:      '#3a3a42',
 };
 
 // ─── Exhibit Data ───────────────────────────────────────────────────
@@ -137,8 +137,10 @@ export const DOOR_SLIDE_DURATION = 1.5;  // seconds
 export const DOOR_AUTO_ADVANCE = 2.0;    // meters to move forward after door opens
 
 // ─── CRT Shader ─────────────────────────────────────────────────────
-export const CRT_SCANLINE_INTENSITY = 0.06;
-export const CRT_BARREL_DISTORTION = 0.02;
-export const CRT_CHROMATIC_ABERRATION = 0.003;
-export const CRT_VIGNETTE_INTENSITY = 0.15;
-export const CRT_FLICKER_INTENSITY = 0.015;
+export const CRT_SCANLINE_INTENSITY = 0.18;
+export const CRT_BARREL_DISTORTION = 0.05;
+export const CRT_CHROMATIC_ABERRATION = 0.007;
+export const CRT_VIGNETTE_INTENSITY = 0.28;
+export const CRT_FLICKER_INTENSITY = 0.025;
+export const CRT_NOISE_INTENSITY = 0.04;
+export const CRT_GREEN_TINT = 0.12;

@@ -5,7 +5,7 @@
   position: fixed;
   inset: 0;
   z-index: 40;
-  background: #0a0a0f;
+  background: #0c0a08;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.4s ease-in-out;
@@ -23,7 +23,7 @@
   z-index: 22;
   display: none;
   padding: 0.8rem 1rem;
-  background: linear-gradient(transparent, rgba(10, 10, 15, 0.85));
+  background: linear-gradient(transparent, rgba(12, 10, 8, 0.85));
   font-family: 'Press Start 2P', 'Courier New', monospace;
   text-align: center;
   pointer-events: none;
@@ -52,7 +52,7 @@
   transform: translateX(-50%);
   z-index: 22;
   display: none;
-  background: rgba(10, 10, 15, 0.9);
+  background: rgba(12, 10, 8, 0.9);
   border: 1px solid rgba(0, 255, 65, 0.5);
   color: #00ff41;
   font-family: 'Press Start 2P', 'Courier New', monospace;
@@ -77,7 +77,7 @@
   left: 1rem;
   z-index: 22;
   display: none;
-  background: rgba(10, 10, 15, 0.8);
+  background: rgba(12, 10, 8, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.25);
   color: rgba(255, 255, 255, 0.7);
   font-family: 'Press Start 2P', 'Courier New', monospace;
@@ -100,7 +100,7 @@
   right: 1rem;
   z-index: 22;
   display: none;
-  background: rgba(10, 10, 15, 0.8);
+  background: rgba(12, 10, 8, 0.8);
   border: 1px solid rgba(0, 255, 65, 0.4);
   color: #00ff41;
   font-family: 'Press Start 2P', 'Courier New', monospace;

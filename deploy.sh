@@ -52,5 +52,11 @@ for f in textures/*; do
   upload "$f"
 done
 
+# Upload icons & social preview
+upload "og-image.png"
+upload "favicon.png"
+upload "favicon.svg"
+upload "apple-touch-icon.png"
+
 echo ""
 echo "=== Deploy complete: https://oz-archive.neocities.org ==="

@@ -5,6 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>The Oz Archive</title>
   <meta name="description" content="A 3D navigable portfolio — walkable museum of software projects.">
+    <!-- Open Graph -->
+    <meta property="og:title" content="OZ ARCHIVE">
+    <meta property="og:description" content="A 3D navigable portfolio — walkable museum of software projects.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://oz-archive.neocities.org/">
+    <meta property="og:image" content="https://oz-archive.neocities.org/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:site_name" content="OZ ARCHIVE">
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="OZ ARCHIVE">
+    <meta name="twitter:description" content="A 3D navigable portfolio — walkable museum of software projects.">
+    <meta name="twitter:image" content="https://oz-archive.neocities.org/og-image.png">
+    <!-- Icons & Theme -->
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon.png">
+    <link rel="apple-touch-icon" href="apple-touch-icon.png">
+    <meta name="theme-color" content="#060608">
+    <link rel="canonical" href="https://oz-archive.neocities.org/">
 
   <link rel="stylesheet" href="css/boot.css">
   <link rel="stylesheet" href="css/hud.css">
@@ -12,7 +32,7 @@
 
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-    html, body { overflow: hidden; height: 100%; background: #0a0a0f; }
+    html, body { overflow: hidden; height: 100%; background: #060608; }
     #game-canvas {
       position: fixed;
       inset: 0;
@@ -67,8 +87,6 @@
   <!-- BMC (Buy Me a Coffee) -->
   <a id="bmc-btn" href="https://buymeacoffee.com/joeyv23" target="_blank" rel="noopener">BMC</a>
 
-  <!-- CRT Toggle -->
-  <button id="crt-toggle">CRT: ON</button>
 
   <!-- Mobile Fallback -->
   <div id="mobile-fallback"></div>

@@ -1,14 +1,14 @@
 // ─── Oz Archive — Main Entry Point ──────────────────────────────────
 import * as THREE from 'three';
 import { COLORS, PLAYER_HEIGHT, DOOR_SLIDE_DURATION, DOOR_AUTO_ADVANCE, EXHIBITS } from './config.js';
-import { buildScene } from './scene.js';
+import { buildScene, torchLights } from './scene.js';
 import { buildExhibits, updateExhibits } from './exhibits.js';
 import { createPlayer, lockPointer, enableMovement, disableMovement, updatePlayer, getCamera, getControls, isLocked } from './player.js';
 import { initInteraction, updateInteraction, getActiveExhibitName } from './interaction.js';
 import { initPortal, updatePortal } from './portal.js';
 import { initSkyPortal, updateSkyPortal } from './portal-sky.js';
 import { runBootSequence, hideBootScreen } from './boot.js';
-import { createComposer, updateCRT, toggleCRT, renderComposer } from './shaders/crt.js';
+import { createComposer, updateCRT, renderComposer, startCRTWarmup } from './shaders/crt.js';
 import { initProxyChat, toggleProxyChat } from './proxychat.js';
 
 let renderer, scene, composer;
@@ -37,7 +37,7 @@ async function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileMode ? 1.5 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure = 2.5;
+  renderer.toneMappingExposure = 2.2;
 
   window.addEventListener('resize', () => {
     renderer.setSize(window.innerWidth, window.innerHeight);
@@ -66,15 +66,8 @@ async function init() {
   }
 
   // Post-processing
-  composer = createComposer(renderer, scene, cam);
+  composer = createComposer(renderer, scene, cam, isMobileMode);
 
-  // CRT toggle button
-  const crtBtn = document.getElementById('crt-toggle');
-  crtBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    const on = toggleCRT();
-    crtBtn.textContent = on ? 'CRT: ON' : 'CRT: OFF';
-  });
 
   // ─── Start render loop NOW (renders behind overlays) ────────────
   clock.start();
@@ -90,10 +83,10 @@ async function init() {
     await runBootSequence(isMobileMode);
     hideBootScreen();
     await doorSequence();
+    startCRTWarmup();
   }
 
   // ─── Post-door: diverge by mode ─────────────────────────────────
-  crtBtn.style.display = 'block';
   document.getElementById('bmc-btn').style.display = 'block';
 
   if (isMobileMode) {
@@ -113,7 +106,8 @@ async function init() {
     const crosshair = document.getElementById('crosshair');
 
     hud.innerHTML = '<span style="display:block; margin-bottom:0.8rem;">CLICK TO ENTER THE ARCHIVE</span>'
-      + '<span style="display:block; font-size:clamp(7px, 0.9vw, 9px); opacity:0.55;">PRESS T TO SPEAK WITH THE CURATOR</span>';
+      + '<span style="display:block; font-size:clamp(7px, 0.9vw, 9px); opacity:0.55;">PRESS T TO SPEAK WITH THE CURATOR</span>'
+      + '<span style="display:block; font-size:clamp(7px, 0.9vw, 9px); opacity:0.55; margin-top:0.3rem; color:#fbbf24;">PRESS B TO BUY ME A COFFEE</span>';
     hud.style.opacity = '0';
     // Fade in the legend after a short delay so the museum renders first
     setTimeout(() => { hud.style.opacity = '1'; }, 600);
@@ -130,13 +124,21 @@ async function init() {
       disableMovement();
       crosshair.style.display = 'none';
       hud.innerHTML = '<span style="display:block; margin-bottom:0.8rem;">Click to resume</span>'
-        + '<span style="display:block; font-size:clamp(7px, 0.9vw, 9px); opacity:0.55;">PRESS T TO SPEAK WITH THE CURATOR</span>';
+        + '<span style="display:block; font-size:clamp(7px, 0.9vw, 9px); opacity:0.55;">PRESS T TO SPEAK WITH THE CURATOR</span>'
+        + '<span style="display:block; font-size:clamp(7px, 0.9vw, 9px); opacity:0.55; margin-top:0.3rem; color:#fbbf24;">PRESS B TO BUY ME A COFFEE</span>';
       hud.style.opacity = '1';
     });
 
     document.addEventListener('click', () => {
       if (!isLocked()) {
         lockPointer();
+      }
+    });
+
+    // [B] key — open Buy Me a Coffee
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'KeyB' && !document.activeElement?.matches('input, textarea')) {
+        window.open('https://buymeacoffee.com/joeyv23', '_blank');
       }
     });
   }
@@ -175,6 +177,16 @@ function animate() {
   }
 
   updateExhibits(elapsed);
+
+  // Torch flicker — compound sine waves for organic warmth
+  for (const t of torchLights) {
+    const flick = 1.0
+      + Math.sin(elapsed * 6.0 + t.phase) * 0.08
+      + Math.sin(elapsed * 13.7 + t.phase * 2.3) * 0.04
+      + Math.sin(elapsed * 23.1 + t.phase * 0.7) * 0.02;
+    t.light.intensity = t.baseIntensity * flick;
+  }
+
   updateCRT(elapsed);
   renderComposer();
 }

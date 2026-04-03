@@ -6,8 +6,9 @@ import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import {
   CRT_SCANLINE_INTENSITY, CRT_BARREL_DISTORTION,
   CRT_CHROMATIC_ABERRATION, CRT_VIGNETTE_INTENSITY,
-  CRT_FLICKER_INTENSITY,
+  CRT_FLICKER_INTENSITY, CRT_NOISE_INTENSITY, CRT_GREEN_TINT,
 } from '../config.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 
 const CRTShader = {
   uniforms: {
@@ -18,6 +19,8 @@ const CRTShader = {
     chromatic:   { value: CRT_CHROMATIC_ABERRATION },
     vignette:    { value: CRT_VIGNETTE_INTENSITY },
     flicker:     { value: CRT_FLICKER_INTENSITY },
+    noise:       { value: CRT_NOISE_INTENSITY },
+    greenTint:   { value: CRT_GREEN_TINT },
     resolution:  { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
   },
   vertexShader: /* glsl */ `
@@ -35,6 +38,8 @@ const CRTShader = {
     uniform float chromatic;
     uniform float vignette;
     uniform float flicker;
+    uniform float noise;
+    uniform float greenTint;
     uniform vec2 resolution;
     varying vec2 vUv;
 
@@ -66,6 +71,15 @@ const CRTShader = {
       vigFactor = pow(vigFactor, vignette);
       color *= vigFactor;
 
+      // Film grain / static noise
+      float grain = fract(sin(dot(uv * resolution + time * 100.0, vec2(12.9898, 78.233))) * 43758.5453);
+      color += (grain - 0.5) * noise;
+
+      // Terminal green tint
+      float luma = dot(color, vec3(0.299, 0.587, 0.114));
+      vec3 greenMono = vec3(luma * 0.2, luma * 1.0, luma * 0.3);
+      color = mix(color, greenMono, greenTint);
+
       // Clamp out-of-bounds from barrel distortion
       if (uv.x < 0.0 || uv.x > 1.0 || uv.y < 0.0 || uv.y > 1.0) {
         color = vec3(0.0);
@@ -78,19 +92,28 @@ const CRTShader = {
 
 let composer = null;
 let crtPass = null;
-let crtEnabled = true;
+let crtEnabled = false;
 
-export function createComposer(renderer, scene, camera) {
+let bloomPass = null;
+
+export function createComposer(renderer, scene, camera, mobile = false) {
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
 
-  crtPass = new ShaderPass(CRTShader);
-  crtPass.renderToScreen = true;
-  composer.addPass(crtPass);
+  // Phosphor bloom — bright areas (screens, emissives) glow through CRT
+  if (!mobile) {
+    bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      0.3,    // strength
+      0.4,    // radius
+      0.85    // threshold — only bright pixels bloom
+    );
+    composer.addPass(bloomPass);
+  }
 
   window.addEventListener('resize', () => {
     composer.setSize(window.innerWidth, window.innerHeight);
-    crtPass.uniforms.resolution.value.set(window.innerWidth, window.innerHeight);
+    if (bloomPass) bloomPass.resolution.set(window.innerWidth, window.innerHeight);
   });
 
   return composer;
@@ -110,6 +133,29 @@ export function toggleCRT() {
 
 export function isCRTEnabled() {
   return crtEnabled;
+}
+
+export function startCRTWarmup() {
+  if (!crtPass) return;
+  // Start with heavy CRT effects, ease down to normal values
+  crtPass.uniforms.vignette.value = 0.7;
+  crtPass.uniforms.scanlines.value = 0.4;
+  crtPass.uniforms.chromatic.value = 0.02;
+
+  const startTime = performance.now();
+  const duration = 2000;
+
+  function ease(t) { return t * t * (3 - 2 * t); }
+
+  function warmup() {
+    const t = Math.min((performance.now() - startTime) / duration, 1);
+    const e = ease(t);
+    crtPass.uniforms.vignette.value = 0.7 - e * (0.7 - CRT_VIGNETTE_INTENSITY);
+    crtPass.uniforms.scanlines.value = 0.4 - e * (0.4 - CRT_SCANLINE_INTENSITY);
+    crtPass.uniforms.chromatic.value = 0.02 - e * (0.02 - CRT_CHROMATIC_ABERRATION);
+    if (t < 1) requestAnimationFrame(warmup);
+  }
+  requestAnimationFrame(warmup);
 }
 
 export function renderComposer() {

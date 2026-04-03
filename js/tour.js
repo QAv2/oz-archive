@@ -158,14 +158,13 @@ function createHotspot(scene, x, z, targetStop, color) {
       emissiveIntensity: 0.6,
       transparent: true,
       opacity: 0.8,
-      flatShading: true,
     })
   );
   torus.rotation.x = -Math.PI / 2;
   torus.position.y = 0.05;
   group.add(torus);
 
-  // Spinning octahedron above
+  // Spinning octahedron above — flatShading kept for faceted crystal look
   const octa = new THREE.Mesh(
     new THREE.OctahedronGeometry(0.12, 0),
     new THREE.MeshStandardMaterial({
