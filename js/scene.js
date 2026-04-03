@@ -167,7 +167,7 @@ export function buildScene(scene, { mobile = false } = {}) {
   }
 
   // ─── Central Atrium Floor & Ceiling ───────────────────────────────
-  const floorGeo = new THREE.CircleGeometry(ATRIUM_RADIUS + 1, 6);
+  const floorGeo = new THREE.CircleGeometry(ATRIUM_RADIUS + 2, 6);
   const floorMesh = new THREE.Mesh(floorGeo, getFloorMaterial());
   floorMesh.rotation.x = -Math.PI / 2;
   floorMesh.rotation.z = Math.PI / 6;
@@ -176,7 +176,7 @@ export function buildScene(scene, { mobile = false } = {}) {
   scene.add(floorMesh);
   meshes.push(floorMesh);
 
-  const ceilGeo = new THREE.CircleGeometry(ATRIUM_RADIUS + 1, 6);
+  const ceilGeo = new THREE.CircleGeometry(ATRIUM_RADIUS + 2, 6);
   const ceilMesh = new THREE.Mesh(ceilGeo, getCeilingMaterial());
   ceilMesh.rotation.x = Math.PI / 2;
   ceilMesh.rotation.z = Math.PI / 6;
