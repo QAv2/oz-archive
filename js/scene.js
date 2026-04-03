@@ -350,7 +350,7 @@ function buildCorridor(scene, index, angle) {
   addCeiling(scene, CORRIDOR_WIDTH, CORRIDOR_LENGTH,
     sin * corridorMid, cos * corridorMid);
   const lastCeil = meshes[meshes.length - 1];
-  lastCeil.rotation.z = angle;
+  lastCeil.rotation.z = -angle;
 
   // Left wall
   const lwx = sin * corridorMid + perpSin * (halfWidth + WALL_THICKNESS / 2);
@@ -387,7 +387,7 @@ function buildAlcove(scene, index, angle, corridorEnd) {
   addCeiling(scene, ALCOVE_WIDTH, ALCOVE_DEPTH,
     sin * alcoveCenter, cos * alcoveCenter);
   const lastCeil = meshes[meshes.length - 1];
-  lastCeil.rotation.z = angle;
+  lastCeil.rotation.z = -angle;
 
   // Back wall
   const backDist = corridorEnd + ALCOVE_DEPTH;

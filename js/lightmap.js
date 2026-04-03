@@ -70,13 +70,16 @@ export function enableLightmapMode() {
   // Kill all PointLights, keep ambient/hemi for exhibit illumination
   for (const { light } of lightStates) {
     if (light.isAmbientLight) {
-      light.intensity = 1.4;
+      light.intensity = 2.0;
     } else if (light.isHemisphereLight) {
-      light.intensity = 1.2;
+      light.intensity = 1.8;
     } else {
       light.visible = false;
     }
   }
+
+  // Brighten panorama background to match desktop warmth
+  sceneRef.backgroundIntensity = 1.5;
 
   // Apply background rotation to align Blender→Three.js equirect
   sceneRef.backgroundRotation = new THREE.Euler(0, panoRotationY, 0);
@@ -95,6 +98,7 @@ export function disableLightmapMode() {
 
   sceneRef.fog = originalFog;
   sceneRef.background = originalBackground;
+  sceneRef.backgroundIntensity = 1.0;
   sceneRef.backgroundRotation = new THREE.Euler(0, 0, 0);
 
   for (const { light, originalIntensity } of lightStates) {

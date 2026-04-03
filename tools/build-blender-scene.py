@@ -153,7 +153,7 @@ def create_mesh(mesh_data):
     # For ceilings: rotX = PI/2 = flip
     if geo_type == 'box':
         # Walls: only rotY matters (rotation around vertical axis)
-        obj.rotation_euler = (0, 0, rot[1])
+        obj.rotation_euler = (0, 0, -rot[1])
     elif geo_type == 'plane' or geo_type == 'circle':
         # Floors/ceilings: Three.js rotates planes to be horizontal
         # In Blender, planes are already horizontal (XY plane)
@@ -164,10 +164,10 @@ def create_mesh(mesh_data):
 
         if abs(rx - (-math.pi / 2)) < 0.01:
             # Floor: face up (default in Blender), just apply Z rotation
-            obj.rotation_euler = (0, 0, rz_threejs)
+            obj.rotation_euler = (0, 0, -rz_threejs)
         elif abs(rx - (math.pi / 2)) < 0.01:
             # Ceiling: face down, flip around X
-            obj.rotation_euler = (math.pi, 0, rz_threejs)
+            obj.rotation_euler = (math.pi, 0, -rz_threejs)
         else:
             # Other rotation
             obj.rotation_euler = (rx, rz_threejs, rot[1])
