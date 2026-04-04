@@ -98,6 +98,9 @@ function buildScreen(group, data) {
     color: data.lightColor,
     emissive: data.lightColor,
     emissiveIntensity: 0.3,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -1,
   });
 
   if (data.texture) {
@@ -119,7 +122,7 @@ function buildScreen(group, data) {
     new THREE.PlaneGeometry(2.2, 1.4),
     screenMat
   );
-  screen.position.set(0, 1.8, -ALCOVE_DEPTH * 0.3 + 0.06);
+  screen.position.set(0, 1.8, -ALCOVE_DEPTH * 0.3 + 0.09);
   group.add(screen);
 
   // Label plate below
@@ -186,6 +189,9 @@ function buildCRT(group, data) {
     color: data.lightColor,
     emissive: data.lightColor,
     emissiveIntensity: 0.4,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -1,
   });
 
   if (data.texture) {
@@ -207,7 +213,7 @@ function buildCRT(group, data) {
     new THREE.PlaneGeometry(0.74, 0.52),
     screenMat
   );
-  screen.position.set(0, 1.19, z0 + 0.255);
+  screen.position.set(0, 1.19, z0 + 0.28);
   group.add(screen);
 
   // Power LED on monitor (green dot)
