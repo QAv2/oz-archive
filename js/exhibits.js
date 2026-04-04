@@ -4,21 +4,45 @@ import { mergeGeometries } from 'three/addons/utils/BufferGeometryUtils.js';
 import { EXHIBITS, CEILING_HEIGHT, ALCOVE_DEPTH } from './config.js';
 import { getExhibitPositions } from './scene.js';
 
-// ─── Shared Exhibit Materials (vault-cohesive) ──────────────────────
+// ─── Texture Loader ─────────────────────────────────────────────────
+const texLoader = new THREE.TextureLoader();
+
+function loadTex(path, repeatX = 1, repeatY = 1, srgb = true) {
+  const tex = texLoader.load(path);
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.wrapT = THREE.RepeatWrapping;
+  tex.repeat.set(repeatX, repeatY);
+  if (srgb) tex.colorSpace = THREE.SRGBColorSpace;
+  return tex;
+}
+
+// ─── Shared Exhibit Materials (vault-cohesive, textured) ────────────
 const ironMat = new THREE.MeshStandardMaterial({
   color: 0x2e2c28, roughness: 0.65, metalness: 0.45,
+  map: loadTex('textures/metal-color.jpg'),
+  normalMap: loadTex('textures/metal-normal.jpg', 1, 1, false),
+  normalScale: new THREE.Vector2(0.7, 0.7),
 });
 const stoneMat = new THREE.MeshStandardMaterial({
   color: 0x383632, roughness: 0.9, metalness: 0.0,
+  map: loadTex('textures/stone-furniture-color.jpg'),
+  normalMap: loadTex('textures/stone-furniture-normal.jpg', 1, 1, false),
+  normalScale: new THREE.Vector2(0.6, 0.6),
 });
 const darkMat = new THREE.MeshStandardMaterial({
   color: 0x141412, roughness: 0.8, metalness: 0.1,
 });
 const beigeMat = new THREE.MeshStandardMaterial({
   color: 0xc8b898, roughness: 0.85, metalness: 0.05,
+  map: loadTex('textures/plastic-color.jpg'),
+  normalMap: loadTex('textures/plastic-normal.jpg', 1, 1, false),
+  normalScale: new THREE.Vector2(0.5, 0.5),
 });
 const beigeDarkMat = new THREE.MeshStandardMaterial({
   color: 0xa89878, roughness: 0.85, metalness: 0.05,
+  map: loadTex('textures/plastic-color.jpg'),
+  normalMap: loadTex('textures/plastic-normal.jpg', 1, 1, false),
+  normalScale: new THREE.Vector2(0.5, 0.5),
 });
 const labelMat = new THREE.MeshStandardMaterial({
   color: 0x0c0c0a, emissive: 0x00ff41, emissiveIntensity: 0.05,
