@@ -52,7 +52,7 @@ async function init() {
 
   // Scene
   scene = new THREE.Scene();
-  buildScene(scene, { mobile: isMobileMode });
+  buildScene(scene, { mobile: isMobileMode, cinema: isCinemaMode });
   buildExhibits(scene);
 
   // Camera setup — desktop vs mobile vs cinema (cam is module-scoped for animate())

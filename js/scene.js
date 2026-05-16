@@ -130,7 +130,7 @@ function addCeiling(scene, width, depth, x, z, color = COLORS.ceiling) {
   return mesh;
 }
 
-export function buildScene(scene, { mobile = false } = {}) {
+export function buildScene(scene, { mobile = false, cinema = false } = {}) {
   mobileMode = mobile;
 
   // ─── Fog (light — just enough depth cue, not darkness) ───────────
@@ -189,8 +189,8 @@ export function buildScene(scene, { mobile = false } = {}) {
   scene.add(ceilMesh);
   meshes.push(ceilMesh);
 
-  // ─── Center Podium ────────────────────────────────────────────────
-  buildCenterPodium(scene);
+  // ─── Center Podium (cinema mode only — the scripted animation needs it) ──
+  if (cinema) buildCenterPodium(scene);
 
   // ─── Hex Walls with Doorway Gaps ──────────────────────────────────
   const wallHalfLen = ATRIUM_RADIUS * Math.tan(Math.PI / 6);
@@ -334,7 +334,8 @@ export function buildScene(scene, { mobile = false } = {}) {
     const x = Math.sin(angle) * dist;
     const z = Math.cos(angle) * dist;
 
-    const light = new THREE.PointLight(EXHIBITS[i].lightColor, 3.5, 25, 1.5);
+    const intensity = EXHIBITS[i].lightIntensity ?? 3.5;
+    const light = new THREE.PointLight(EXHIBITS[i].lightColor, intensity, 25, 1.5);
     light.position.set(x, CEILING_HEIGHT - 0.5, z);
     scene.add(light);
   }

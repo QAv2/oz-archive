@@ -107,7 +107,7 @@ export function buildExhibits(scene) {
       case 'lab':      buildLab(group, data); break;
       case 'carousel': buildCarousel(group, data); break;
       case 'scroll':   buildScroll(group, data); break;
-      case 'laptop':   buildLaptop(group, data); break;
+      case 'oracle':   buildOracleHexagram(group, data); break;
       case 'arcade':   buildScreen(group, data); break;  // no exhibit uses this — fallback to screen
       case 'iceberg':  buildIceberg(group, data); break;
       case 'qa':       buildQA(group, data); break;
@@ -728,124 +728,144 @@ function buildScroll(group, data) {
   addLabel(group, data.name, 0, 0.55, z0, data.lightColor);
 }
 
-// ─── Open Laptop on a Simple Table ──────────────────────────────────
-function buildLaptop(group, data) {
+// ─── Oracle: I Ching Hexagram Tower ─────────────────────────────────
+// 6 horizontal yang/yin lines stacked above an obsidian podium, cycling
+// through King Wen hexagrams. Vertical, geometric, directly evokes the
+// "geometric reading instrument" framing.
+//
+// Hexagram bits: line[0] = bottom, line[5] = top. 1 = yang (solid), 0 = yin (split).
+const ORACLE_HEXAGRAMS = [
+  // [hexagram bits bottom→top, name]
+  [[1,1,1,1,1,1], 'Qian'],          // 1 — Heaven
+  [[1,0,0,1,1,1], 'Lin'],           // 19 — Approach
+  [[1,1,1,0,0,0], 'Pi'],            // 12 — Obstruction
+  [[0,0,0,1,1,1], 'Tai'],           // 11 — Peace
+  [[1,0,0,0,0,0], 'Fu'],            // 24 — Return
+  [[1,0,1,1,1,0], 'Ge'],            // 49 — Revolution
+  [[1,0,1,0,1,0], 'Ji Ji'],         // 63 — After Completion
+  [[0,1,0,1,0,1], 'Wei Ji'],        // 64 — Before Completion
+  [[0,0,0,0,0,0], 'Kun'],           // 2  — Earth
+];
+
+function buildOracleHexagram(group, data) {
   const z0 = -ALCOVE_DEPTH * 0.3;
-  const tableY = 0.78;
 
-  // ── Table ──
-  const tableTop = new THREE.Mesh(
-    new THREE.BoxGeometry(1.40, 0.04, 0.80),
-    stoneMat
-  );
-  tableTop.position.set(0, tableY, z0);
-  group.add(tableTop);
-  for (const [dx, dz] of [[-0.60, -0.32], [0.60, -0.32], [-0.60, 0.32], [0.60, 0.32]]) {
-    const leg = new THREE.Mesh(
-      new THREE.BoxGeometry(0.05, tableY, 0.05),
-      stoneMat
-    );
-    leg.position.set(dx, tableY / 2, z0 + dz);
-    group.add(leg);
-  }
-
-  // ── Laptop base (closed half) ──
-  const baseW = 0.40, baseD = 0.28, baseT = 0.022;
-  const baseY = tableY + 0.02 + baseT / 2;
-  const base = new THREE.Mesh(new THREE.BoxGeometry(baseW, baseT, baseD), laptopMat);
-  base.position.set(0, baseY, z0);
+  // ── Obsidian Podium ──
+  const obsidianMat = new THREE.MeshStandardMaterial({
+    color: 0x141416, roughness: 0.35, metalness: 0.55,
+    emissive: 0x110a04, emissiveIntensity: 0.15,
+  });
+  const baseGeo = new THREE.CylinderGeometry(0.45, 0.55, 0.85, 12);
+  const base = new THREE.Mesh(baseGeo, obsidianMat);
+  base.position.set(0, 0.425, z0);
   group.add(base);
 
-  // Keyboard inset
-  const kb = new THREE.Mesh(
-    new THREE.BoxGeometry(baseW * 0.82, 0.003, baseD * 0.55),
-    laptopDarkMat
+  // Tapered top slab
+  const top = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.50, 0.50, 0.06, 12),
+    obsidianMat
   );
-  kb.position.set(0, baseY + baseT / 2 + 0.0017, z0 + 0.02);
-  group.add(kb);
-  // Faint key rows
-  for (let row = 0; row < 4; row++) {
-    const keys = new THREE.Mesh(
-      new THREE.BoxGeometry(baseW * 0.74, 0.003, 0.028),
-      new THREE.MeshStandardMaterial({ color: 0x303236, roughness: 0.65 })
-    );
-    keys.position.set(0, baseY + baseT / 2 + 0.002, z0 + 0.0 + row * 0.036);
-    group.add(keys);
-  }
+  top.position.set(0, 0.88, z0);
+  group.add(top);
 
-  // Trackpad
-  const tp = new THREE.Mesh(
-    new THREE.BoxGeometry(0.10, 0.002, 0.060),
-    new THREE.MeshStandardMaterial({ color: 0x1c1e22, roughness: 0.5, metalness: 0.3 })
-  );
-  tp.position.set(0, baseY + baseT / 2 + 0.0015, z0 + 0.11);
-  group.add(tp);
-
-  // Power LED
-  const led = new THREE.Mesh(
-    new THREE.CylinderGeometry(0.005, 0.005, 0.002, 6),
-    new THREE.MeshStandardMaterial({ color: 0xffa040, emissive: 0xffa040, emissiveIntensity: 0.9 })
-  );
-  led.rotation.x = Math.PI / 2;
-  led.position.set(-baseW / 2 + 0.018, baseY + baseT / 2 + 0.0015, z0 + 0.13);
-  group.add(led);
-
-  // ── Screen half (hinge at back of base) ──
-  // Hinge axis along X at (y=base top, z=back edge of base)
-  const hingeZ = z0 - baseD / 2;
-  const hingeY = baseY + baseT / 2;
-  const pivot = new THREE.Object3D();
-  pivot.position.set(0, hingeY, hingeZ);
-  // rotation.x negative tilts the screen top toward -Z (back of laptop, away from player)
-  pivot.rotation.x = -0.32;  // ~108° open from base
-  group.add(pivot);
-
-  const screenW = 0.40, screenH = 0.26, screenT = 0.012;
-  const screenBack = new THREE.Mesh(
-    new THREE.BoxGeometry(screenW, screenH, screenT),
-    laptopMat
-  );
-  // pivot at bottom-back of screen: extend +Y (up from hinge), -Z (back face flush at z=0)
-  screenBack.position.set(0, screenH / 2, -screenT / 2);
-  pivot.add(screenBack);
-
-  // Bezel on front of screen back (+Z side in pivot local)
-  const bezel = new THREE.Mesh(
-    new THREE.BoxGeometry(screenW * 0.94, screenH * 0.86, 0.002),
-    laptopDarkMat
-  );
-  bezel.position.set(0, screenH * 0.50, +0.0011);
-  pivot.add(bezel);
-
-  // Display plane (landing-page screenshot)
-  const displayMat = new THREE.MeshStandardMaterial({
+  // Small inset Oracle landing-page disc on podium top (facing up)
+  const discMat = new THREE.MeshStandardMaterial({
     color: data.lightColor,
     emissive: data.lightColor,
-    emissiveIntensity: 0.35,
-    polygonOffset: true,
-    polygonOffsetFactor: -1,
-    polygonOffsetUnits: -1,
+    emissiveIntensity: 0.55,
   });
   if (data.texture) {
     const loader = new THREE.TextureLoader();
     loader.load(data.texture, (tex) => {
       tex.colorSpace = THREE.SRGBColorSpace;
-      displayMat.map = tex;
-      displayMat.color.set(0xffffff);
-      displayMat.emissive.set(0xffffff);
-      displayMat.emissiveMap = tex;
-      displayMat.emissiveIntensity = 0.75;
-      displayMat.needsUpdate = true;
+      discMat.map = tex;
+      discMat.emissiveMap = tex;
+      discMat.color.set(0xffffff);
+      discMat.emissive.set(0xffffff);
+      discMat.emissiveIntensity = 0.75;
+      discMat.needsUpdate = true;
     });
   }
-  const display = new THREE.Mesh(
-    new THREE.PlaneGeometry(screenW * 0.88, screenH * 0.78),
-    displayMat
-  );
-  display.position.set(0, screenH * 0.50, +0.0022);
-  pivot.add(display);
+  const disc = new THREE.Mesh(new THREE.CircleGeometry(0.32, 32), discMat);
+  disc.rotation.x = -Math.PI / 2;
+  disc.position.set(0, 0.915, z0);
+  group.add(disc);
+
+  // ── Hexagram lines (6 stacked above podium) ──
+  const linesAnchorY = 1.30;
+  const lineSpacing = 0.20;
+  const halfW = 0.60;     // each half of a yin line
+  const yangBridge = 0.30; // middle bridge for yang lines
+  const lineH = 0.06, lineD = 0.05;
+
+  const lineColor = data.lightColor;
+  const lineMat = new THREE.MeshStandardMaterial({
+    color: lineColor, emissive: lineColor, emissiveIntensity: 0.85,
+    roughness: 0.5, metalness: 0.3,
+  });
+  const lineCapMat = new THREE.MeshStandardMaterial({
+    color: 0xb88c3a, emissive: 0x402810, emissiveIntensity: 0.3,
+    roughness: 0.4, metalness: 0.75,
+  });
+
+  const hexLines = [];
+  for (let i = 0; i < 6; i++) {
+    const y = linesAnchorY + i * lineSpacing;
+    // Left half
+    const left = new THREE.Mesh(
+      new THREE.BoxGeometry(halfW, lineH, lineD),
+      lineMat
+    );
+    left.position.set(-(halfW / 2 + yangBridge / 2), y, z0);
+    group.add(left);
+    // Right half
+    const right = new THREE.Mesh(
+      new THREE.BoxGeometry(halfW, lineH, lineD),
+      lineMat
+    );
+    right.position.set(halfW / 2 + yangBridge / 2, y, z0);
+    group.add(right);
+    // Middle bridge (toggleable; visible for yang, hidden for yin)
+    const bridge = new THREE.Mesh(
+      new THREE.BoxGeometry(yangBridge, lineH, lineD),
+      lineMat
+    );
+    bridge.position.set(0, y, z0);
+    group.add(bridge);
+    // Brass caps on outer ends
+    const capL = new THREE.Mesh(
+      new THREE.BoxGeometry(0.05, lineH * 1.4, lineD * 1.2),
+      lineCapMat
+    );
+    capL.position.set(-(halfW + yangBridge / 2 + 0.025), y, z0);
+    group.add(capL);
+    const capR = new THREE.Mesh(
+      new THREE.BoxGeometry(0.05, lineH * 1.4, lineD * 1.2),
+      lineCapMat
+    );
+    capR.position.set(halfW + yangBridge / 2 + 0.025, y, z0);
+    group.add(capR);
+
+    hexLines.push({ bridge });
+  }
+
+  // Animation state — read by updateExhibits
+  group.userData.oracle = 'hexagram';
+  group.userData.hexLines = hexLines;
+  group.userData.hexIndex = 0;
+  group.userData.hexElapsed = 0;
+  group.userData.hexDwell = 5.0;  // seconds per hexagram
+
+  // Apply initial hexagram
+  applyHexagram(hexLines, ORACLE_HEXAGRAMS[0][0]);
 
   addLabel(group, data.name, 0, 0.40, z0, data.lightColor);
+}
+
+function applyHexagram(hexLines, bits) {
+  for (let i = 0; i < 6; i++) {
+    hexLines[i].bridge.visible = bits[i] === 1;
+  }
 }
 
 // ─── Shared Label ───────────────────────────────────────────────────
@@ -897,6 +917,15 @@ export function updateExhibits(time, camera = null, delta = 1 / 60) {
           child.rotation.y = -fa;
         }
       });
+    }
+
+    if (group.userData.oracle === 'hexagram') {
+      group.userData.hexElapsed += delta;
+      if (group.userData.hexElapsed >= group.userData.hexDwell) {
+        group.userData.hexElapsed = 0;
+        group.userData.hexIndex = (group.userData.hexIndex + 1) % ORACLE_HEXAGRAMS.length;
+        applyHexagram(group.userData.hexLines, ORACLE_HEXAGRAMS[group.userData.hexIndex][0]);
+      }
     }
 
     if (group.userData.scroll) {

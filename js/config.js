@@ -102,7 +102,8 @@ export const EXHIBITS = [
     texture: 'textures/exhibit-oracle.png',
     lightColor: 0xff9a3c,
     lightColorCSS: '#ff9a3c',
-    type: 'laptop',
+    lightIntensity: 5.5,
+    type: 'oracle',
   },
   {
     id: 'iceberg',
