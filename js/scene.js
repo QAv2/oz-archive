@@ -16,6 +16,10 @@ const meshes = [];
 // Torch lights exported for flicker animation in main.js
 export const torchLights = [];
 
+// Center podium + scroll — exported for cinema.js control
+export let podiumGroup = null;
+export let scrollMesh = null;
+
 // ─── Texture Loader ────────────────────────────────────────────────
 const textureLoader = new THREE.TextureLoader();
 
@@ -184,6 +188,9 @@ export function buildScene(scene, { mobile = false } = {}) {
   ceilMesh.userData.archType = 'ceiling';
   scene.add(ceilMesh);
   meshes.push(ceilMesh);
+
+  // ─── Center Podium ────────────────────────────────────────────────
+  buildCenterPodium(scene);
 
   // ─── Hex Walls with Doorway Gaps ──────────────────────────────────
   const wallHalfLen = ATRIUM_RADIUS * Math.tan(Math.PI / 6);
@@ -432,6 +439,70 @@ function buildAlcove(scene, index, angle, corridorEnd) {
       cos * corridorEnd - perpCos * wingOffset,
       angle);
   }
+}
+
+// ─── Center Podium + Scroll ─────────────────────────────────────────
+function buildCenterPodium(scene) {
+  const stoneMat = new THREE.MeshStandardMaterial({
+    color: 0x383632,
+    map: loadTiled('textures/stone-furniture-color.jpg', 1, 1),
+    normalMap: loadTiled('textures/stone-furniture-normal.jpg', 1, 1, false),
+    normalScale: new THREE.Vector2(0.7, 0.7),
+    roughness: 0.85,
+    metalness: 0.05,
+  });
+
+  const parchmentMat = new THREE.MeshStandardMaterial({
+    map: textureLoader.load('textures/parchment-color.jpg'),
+    normalMap: (() => {
+      const n = textureLoader.load('textures/parchment-normal.jpg');
+      n.colorSpace = THREE.LinearSRGBColorSpace;
+      return n;
+    })(),
+    normalScale: new THREE.Vector2(0.4, 0.4),
+    roughness: 0.75,
+    metalness: 0.0,
+    side: THREE.DoubleSide,
+  });
+  parchmentMat.map.colorSpace = THREE.SRGBColorSpace;
+
+  const group = new THREE.Group();
+
+  // Pedestal — tapered octagonal column
+  const baseGeo = new THREE.CylinderGeometry(0.32, 0.38, 0.85, 8);
+  const base = new THREE.Mesh(baseGeo, stoneMat);
+  base.position.y = 0.425;
+  group.add(base);
+
+  // Top slab — slightly wider disc
+  const topGeo = new THREE.CylinderGeometry(0.36, 0.36, 0.06, 8);
+  const top = new THREE.Mesh(topGeo, stoneMat);
+  top.position.y = 0.88;
+  group.add(top);
+
+  // Scroll — flat parchment plane, slightly tilted
+  const scrollGeo = new THREE.PlaneGeometry(0.5, 0.35);
+  scrollMesh = new THREE.Mesh(scrollGeo, parchmentMat);
+  scrollMesh.rotation.x = -Math.PI / 2 + 0.05; // nearly flat, very slight tilt
+  scrollMesh.position.y = 0.92;
+  group.add(scrollMesh);
+
+  // Scroll rollers — two small cylinders at each end
+  const rollerMat = new THREE.MeshStandardMaterial({
+    color: 0x1a1612, roughness: 0.6, metalness: 0.2,
+  });
+  const rollerGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.38, 8);
+  for (const side of [-1, 1]) {
+    const roller = new THREE.Mesh(rollerGeo, rollerMat);
+    roller.rotation.z = Math.PI / 2;
+    roller.position.set(0, 0.925, side * 0.175);
+    group.add(roller);
+  }
+
+  group.position.set(0, 0, 0);
+  scene.add(group);
+  meshes.push(group);
+  podiumGroup = group;
 }
 
 // Returns positions for exhibit placement

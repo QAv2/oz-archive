@@ -290,6 +290,321 @@ for idx, s in enumerate(data['sconces']):
 
 print(f"  Created {len(data['sconces'])} sconces ({len(data['sconces']) * 3} meshes)")
 
+# ─── Exhibit materials ──────────────────────────────────────────────
+IRON_COLOR = hex_to_linear('#2e2c28')
+STONE_FURN_COLOR = hex_to_linear('#383632')
+DARK_COLOR = hex_to_linear('#141412')
+BEIGE_COLOR = hex_to_linear('#c8b898')
+BEIGE_DARK_COLOR = hex_to_linear('#a89878')
+LABEL_COLOR = hex_to_linear('#0c0c0a')
+GREY_METAL_COLOR = hex_to_linear('#999988')
+DARK_KEYS_COLOR = hex_to_linear('#555550')
+WATERLINE_COLOR = hex_to_linear('#4488aa')
+LED_GREEN = hex_to_linear('#00ff41')
+
+iron_mat = make_material('iron', IRON_COLOR, 0.65)
+iron_mat.node_tree.nodes['Principled BSDF'].inputs['Metallic'].default_value = 0.45
+stone_furn_mat = make_material('stone_furniture', STONE_FURN_COLOR, 0.9)
+dark_exhibit_mat = make_material('dark_exhibit', DARK_COLOR, 0.8)
+dark_exhibit_mat.node_tree.nodes['Principled BSDF'].inputs['Metallic'].default_value = 0.1
+beige_mat = make_material('beige', BEIGE_COLOR, 0.85)
+beige_dark_mat = make_material('beige_dark', BEIGE_DARK_COLOR, 0.85)
+label_exhibit_mat = make_material('label', LABEL_COLOR, 0.7)
+label_exhibit_mat.node_tree.nodes['Principled BSDF'].inputs['Metallic'].default_value = 0.3
+grey_metal_mat = make_material('grey_metal', GREY_METAL_COLOR, 0.6)
+grey_metal_mat.node_tree.nodes['Principled BSDF'].inputs['Metallic'].default_value = 0.3
+dark_keys_mat = make_material('dark_keys', DARK_KEYS_COLOR, 0.8)
+waterline_mat = make_material('waterline', WATERLINE_COLOR, 0.5)
+led_green_mat = make_emissive_material('led_green', LED_GREEN, 3.0)
+
+EXHIBIT_MAT_MAP = {
+    'iron': iron_mat,
+    'stone': stone_furn_mat,
+    'dark': dark_exhibit_mat,
+    'beige': beige_mat,
+    'beige_dark': beige_dark_mat,
+    'label': label_exhibit_mat,
+    'grey_metal': grey_metal_mat,
+    'dark_keys': dark_keys_mat,
+    'led_green': led_green_mat,
+    'waterline': waterline_mat,
+}
+
+# Cache for emissive materials keyed by color
+_emissive_cache = {}
+
+def get_emissive_mat(hex_color, intensity=0.5, flat=False):
+    key = f"{hex_color}_{intensity}_{flat}"
+    if key not in _emissive_cache:
+        color = hex_to_linear(hex_color)
+        mat = make_emissive_material(f"emissive_{hex_color}", color, intensity)
+        if flat:
+            # Blender doesn't have flatShading per-material, but we set auto smooth off on mesh
+            pass
+        _emissive_cache[key] = mat
+    return _emissive_cache[key]
+
+def get_ice_mat(color_hex, em_hex, em_int):
+    key = f"ice_{color_hex}_{em_hex}_{em_int}"
+    if key not in _emissive_cache:
+        color = hex_to_linear(color_hex)
+        em_color = hex_to_linear(em_hex)
+        mat = bpy.data.materials.new(f"ice_{color_hex}")
+        mat.use_nodes = True
+        bsdf = mat.node_tree.nodes['Principled BSDF']
+        bsdf.inputs['Base Color'].default_value = color
+        bsdf.inputs['Emission Color'].default_value = em_color
+        bsdf.inputs['Emission Strength'].default_value = em_int
+        bsdf.inputs['Roughness'].default_value = 0.4
+        _emissive_cache[key] = mat
+    return _emissive_cache[key]
+
+# ─── Build exhibits ────────────────────────────────────────────────
+print("Building exhibits...")
+exhibit_count = 0
+
+for ex in data.get('exhibits', []):
+    col_name = f"exhibit_{ex['id']}"
+    ex_col = bpy.data.collections.new(col_name)
+    bpy.context.scene.collection.children.link(ex_col)
+
+    gx, gy, gz = ex['groupPosition']
+    grotY = ex['groupRotationY']
+
+    for part in ex['parts']:
+        pname = f"{ex['id']}_{part['name']}"
+        geo = part['geoType']
+        args = part['geoArgs']
+        px, py, pz = part['position']
+        rx, ry, rz = part['rotation']
+        mat_key = part['material']
+
+        obj = None
+
+        if geo == 'box':
+            bpy.ops.mesh.primitive_cube_add(size=1)
+            obj = bpy.context.active_object
+            obj.scale = (args[0], args[2], args[1])  # XYZ → XZY
+        elif geo == 'plane':
+            bpy.ops.mesh.primitive_plane_add(size=1)
+            obj = bpy.context.active_object
+            obj.scale = (args[0], args[1], 1)
+        elif geo == 'cylinder':
+            # args: [radiusTop, radiusBottom, height, segments]
+            r_top, r_bot, height = args[0], args[1], args[2]
+            segs = int(args[3]) if len(args) > 3 else 8
+            radius = (r_top + r_bot) / 2
+            bpy.ops.mesh.primitive_cylinder_add(radius=radius, depth=height, vertices=segs)
+            obj = bpy.context.active_object
+            # Approximate taper by scaling top/bottom (Blender cylinder is uniform)
+            # For small differences this is close enough
+        elif geo == 'torus':
+            # args: [majorR, tubeR, radialSegs, tubularSegs]
+            bpy.ops.mesh.primitive_torus_add(
+                major_radius=args[0], minor_radius=args[1],
+                major_segments=int(args[3]) if len(args) > 3 else 24,
+                minor_segments=int(args[2]) if len(args) > 2 else 8,
+            )
+            obj = bpy.context.active_object
+        elif geo == 'icosahedron':
+            # args: [radius, detail]
+            bpy.ops.mesh.primitive_ico_sphere_add(radius=args[0], subdivisions=max(1, int(args[1]) + 1) if len(args) > 1 else 2)
+            obj = bpy.context.active_object
+        elif geo == 'sphere':
+            bpy.ops.mesh.primitive_uv_sphere_add(radius=args[0],
+                segments=int(args[1]) if len(args) > 1 else 16,
+                ring_count=int(args[2]) if len(args) > 2 else 8)
+            obj = bpy.context.active_object
+        elif geo == 'ring':
+            # args: [innerR, outerR, segments]
+            segs = int(args[2]) if len(args) > 2 else 32
+            bpy.ops.mesh.primitive_circle_add(vertices=segs, radius=args[1], fill_type='NGON')
+            obj = bpy.context.active_object
+            # Ring geometry — approximate with scaled circle
+        elif geo == 'circle':
+            segs = int(args[1]) if len(args) > 1 else 32
+            bpy.ops.mesh.primitive_circle_add(vertices=segs, radius=args[0], fill_type='NGON')
+            obj = bpy.context.active_object
+        else:
+            print(f"  Unknown geoType: {geo} for {pname}")
+            continue
+
+        obj.name = pname
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+
+        # Part-local position in Three.js space, then transform by group
+        # Three.js: group at (gx, gy, gz) rotated groupRotY, part at (px, py, pz) rotated (rx, ry, rz)
+        # In Blender: Y↔Z swap for positions + negate rotZ for Y-up→Z-up
+        # Apply group transform: rotate part position by groupRotY around Y axis, then translate
+        import math as _m
+        cosG = _m.cos(grotY)
+        sinG = _m.sin(grotY)
+        # Rotate local position by groupRotY (around Three.js Y axis)
+        wx = px * cosG + pz * sinG
+        wz = -px * sinG + pz * cosG
+        wy = py
+        # Add group position
+        wx += gx
+        wz += gz
+        wy += gy
+
+        # Blender: swap Y↔Z
+        obj.location = (wx, wz, wy)
+
+        # Rotation: combine part rotation with group rotation
+        # Part rotX in Three.js (e.g. PI/2 for sideways cylinder)
+        # Group rotY in Three.js = rotation around up axis
+        # In Blender: around Z axis (negated)
+        part_rotZ_blender = -(ry + grotY)  # Three.js Y → Blender -Z
+        part_rotX_blender = rx              # Three.js X → Blender X
+
+        if geo == 'plane':
+            # Planes in Blender are XY, in Three.js they face +Z
+            # Exhibit planes face forward (toward atrium) after group rotation
+            obj.rotation_euler = (math.pi / 2, 0, part_rotZ_blender)
+        elif geo in ('cylinder',) and abs(rx - math.pi / 2) < 0.01:
+            # Cylinder rotated 90° in Three.js X = lying on side
+            obj.rotation_euler = (math.pi / 2, 0, part_rotZ_blender)
+        elif geo == 'torus' and abs(rx - math.pi / 2) < 0.01:
+            # Torus flat in Three.js (rotX=PI/2) = already flat in Blender
+            obj.rotation_euler = (0, 0, part_rotZ_blender)
+        elif geo == 'torus' and abs(rx - (-math.pi / 2)) < 0.01:
+            # Torus flipped
+            obj.rotation_euler = (math.pi, 0, part_rotZ_blender)
+        else:
+            obj.rotation_euler = (0, 0, part_rotZ_blender)
+
+        # Assign material
+        obj.data.materials.clear()
+        if mat_key == 'screen':
+            em_color = part.get('emissiveColor', '#ffffff')
+            mat = get_emissive_mat(em_color, 0.8)
+            obj.data.materials.append(mat)
+        elif mat_key == 'emissive':
+            em_color = part.get('emissiveColor', '#ffffff')
+            em_int = part.get('emissiveIntensity', 0.5)
+            mat = get_emissive_mat(em_color, em_int)
+            obj.data.materials.append(mat)
+        elif mat_key == 'ice':
+            c = part.get('color', '#ffffff')
+            ec = part.get('emissiveColor', '#ffffff')
+            ei = part.get('emissiveIntensity', 0.2)
+            mat = get_ice_mat(c, ec, ei)
+            obj.data.materials.append(mat)
+        elif mat_key in EXHIBIT_MAT_MAP:
+            obj.data.materials.append(EXHIBIT_MAT_MAP[mat_key])
+
+        # Move to exhibit collection
+        for c in obj.users_collection:
+            c.objects.unlink(obj)
+        ex_col.objects.link(obj)
+        exhibit_count += 1
+
+print(f"  Created {exhibit_count} exhibit parts across {len(data.get('exhibits', []))} exhibits")
+
+# ─── Build portals ──────────────────────────────────────────────────
+print("Building portals...")
+portal_col = bpy.data.collections.new('portals')
+bpy.context.scene.collection.children.link(portal_col)
+
+portal_data = data.get('portals', {})
+
+# Floor portal (hex glyph)
+if 'floor' in portal_data:
+    fp = portal_data['floor']
+    fpx, fpy, fpz = fp['position']
+    portal_cyan_mat = make_emissive_material('portal_cyan', hex_to_linear('#0abdc6'), 1.0)
+
+    for part in fp['parts']:
+        args = part['geoArgs']
+        if part['geoType'] == 'ring':
+            segs = int(args[2]) if len(args) > 2 else 32
+            bpy.ops.mesh.primitive_circle_add(vertices=segs, radius=args[1], fill_type='NGON')
+            obj = bpy.context.active_object
+            # Hollow out: delete inner faces (approximate — use outer radius only)
+        elif part['geoType'] == 'circle':
+            segs = int(args[1]) if len(args) > 1 else 32
+            bpy.ops.mesh.primitive_circle_add(vertices=segs, radius=args[0], fill_type='NGON')
+            obj = bpy.context.active_object
+        else:
+            continue
+
+        obj.name = f"portal_floor_{part['name']}"
+        # Blender: Y↔Z swap
+        obj.location = (fpx, fpz, fpy)
+        # Floor portal: rotX=-PI/2 in Three.js = already flat in Blender (XY plane)
+        obj.rotation_euler = (0, 0, 0)
+        obj.data.materials.clear()
+        obj.data.materials.append(portal_cyan_mat)
+        for c in obj.users_collection:
+            c.objects.unlink(obj)
+        portal_col.objects.link(obj)
+
+# Ceiling portal (quaternion device)
+if 'ceiling' in portal_data:
+    cp = portal_data['ceiling']
+    cpx, cpy, cpz = cp['position']
+
+    portal_gold_mat = make_emissive_material('portal_gold', hex_to_linear('#ffc060'), 2.0)
+    portal_silver_mat = make_material('portal_silver', hex_to_linear('#b8c4d0'), 0.4)
+    portal_silver_mat.node_tree.nodes['Principled BSDF'].inputs['Metallic'].default_value = 0.8
+    portal_amber_mat = make_emissive_material('portal_amber', hex_to_linear('#ffa040'), 1.5)
+
+    PORTAL_CEIL_MATS = {
+        'portal_gold': portal_gold_mat,
+        'portal_silver': portal_silver_mat,
+        'portal_amber': portal_amber_mat,
+    }
+
+    for part in cp['parts']:
+        args = part['geoArgs']
+        geo = part['geoType']
+        pname = f"portal_ceiling_{part['name']}"
+
+        if geo == 'sphere':
+            bpy.ops.mesh.primitive_uv_sphere_add(radius=args[0],
+                segments=int(args[1]) if len(args) > 1 else 16,
+                ring_count=int(args[2]) if len(args) > 2 else 8)
+        elif geo == 'icosahedron':
+            bpy.ops.mesh.primitive_ico_sphere_add(radius=args[0], subdivisions=max(1, int(args[1]) + 1) if len(args) > 1 else 2)
+        elif geo == 'torus':
+            bpy.ops.mesh.primitive_torus_add(
+                major_radius=args[0], minor_radius=args[1],
+                major_segments=int(args[3]) if len(args) > 3 else 48,
+                minor_segments=int(args[2]) if len(args) > 2 else 12,
+            )
+        else:
+            continue
+
+        obj = bpy.context.active_object
+        obj.name = pname
+
+        # Wireframe for Hg shell
+        if part.get('wireframe'):
+            mod = obj.modifiers.new('Wire', 'WIREFRAME')
+            mod.thickness = 0.005
+
+        # Position: Y↔Z swap
+        obj.location = (cpx, cpz, cpy)
+
+        # Apply pivot rotation for torus rings (i, j, k)
+        if 'pivotRotation' in part:
+            pr = part['pivotRotation']
+            # Three.js pivot rotation → Blender: swap Y↔Z axes
+            obj.rotation_euler = (pr[0], pr[2], -pr[1] if pr[1] != 0 else pr[1])
+
+        # Material
+        mat_key = part.get('material', '')
+        if mat_key in PORTAL_CEIL_MATS:
+            obj.data.materials.clear()
+            obj.data.materials.append(PORTAL_CEIL_MATS[mat_key])
+
+        for c in obj.users_collection:
+            c.objects.unlink(obj)
+        portal_col.objects.link(obj)
+
+print("  Built floor + ceiling portals")
+
 # ─── Tour cameras ───────────────────────────────────────────────────
 print("Setting up cameras...")
 cameras_col = bpy.data.collections.new('cameras')
@@ -413,6 +728,12 @@ for name, col in room_collections.items():
     print(f"  {name}: {len(col.objects)} objects")
 print(f"  lights: {len(lights_col.objects)} lights")
 print(f"  sconces: {len(sconces_col.objects)} sconce parts")
+for col in bpy.data.collections:
+    if col.name.startswith('exhibit_'):
+        print(f"  {col.name}: {len(col.objects)} parts")
+if 'portals' in [c.name for c in bpy.data.collections]:
+    pcol = bpy.data.collections['portals']
+    print(f"  portals: {len(pcol.objects)} objects")
 print(f"  cameras: {len(cameras_col.objects)} cameras")
 
 # ─── Save .blend file ──────────────────────────────────────────────
@@ -422,7 +743,7 @@ print(f"\nSaved: {BLEND_PATH}")
 
 # ─── Headless bake (when --background) ─────────────────────────────
 import sys
-if '--background' in sys.argv or '-b' in sys.argv:
+if ('--background' in sys.argv or '-b' in sys.argv) and '--nobake' not in sys.argv:
     print("\n--- Starting headless lightmap bake ---")
 
     # Select all architecture objects

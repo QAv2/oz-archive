@@ -88,9 +88,9 @@ function addHexDisc(room, radius, y, rotX, rotZ, name, materialType) {
 }
 
 // ─── Build Atrium ───────────────────────────────────────────────────
-addHexDisc('atrium', ATRIUM_RADIUS + 1, 0, -Math.PI / 2, Math.PI / 6,
+addHexDisc('atrium', ATRIUM_RADIUS + 2, 0, -Math.PI / 2, Math.PI / 6,
   'atrium_floor', 'floor');
-addHexDisc('atrium', ATRIUM_RADIUS + 1, CEILING_HEIGHT, Math.PI / 2, Math.PI / 6,
+addHexDisc('atrium', ATRIUM_RADIUS + 2, CEILING_HEIGHT, Math.PI / 2, Math.PI / 6,
   'atrium_ceiling', 'ceiling');
 
 const wallHalfLen = ATRIUM_RADIUS * Math.tan(Math.PI / 6);
@@ -278,6 +278,147 @@ for (let i = 0; i < NUM_SPOKES; i++) {
   });
 }
 
+// ─── Exhibit Positions (same math as scene.js getExhibitPositions) ──
+const EXHIBIT_META = [
+  { id: 'disclosure', type: 'screen',   lightColor: '#34d399', texture: 'textures/exhibit-disclosure.png' },
+  { id: 'qa',         type: 'qa',       lightColor: '#fbbf24', texture: null },
+  { id: 'intel',      type: 'crt',      lightColor: '#4488ff', texture: 'textures/exhibit-intel.png' },
+  { id: 'physics',    type: 'lab',      lightColor: '#aa44ff', texture: null },
+  { id: 'youtube',    type: 'carousel', lightColor: '#ff4444', texture: null },
+  { id: 'iceberg',    type: 'iceberg',  lightColor: '#40c8ff', texture: null },
+];
+
+const exhibits = [];
+for (let i = 0; i < NUM_SPOKES; i++) {
+  const angle = (i * Math.PI * 2) / NUM_SPOKES;
+  const dist = ATRIUM_RADIUS + CORRIDOR_LENGTH + ALCOVE_DEPTH * 0.5;
+  const ex = EXHIBIT_META[i];
+  const groupX = Math.sin(angle) * dist;
+  const groupZ = Math.cos(angle) * dist;
+  const groupRotY = angle + Math.PI;  // face toward center
+  const z0 = -ALCOVE_DEPTH * 0.3;
+
+  const parts = [];  // { name, geoType, geoArgs, position:[x,y,z], rotation:[x,y,z], material }
+
+  if (ex.type === 'screen') {
+    parts.push({ name: 'frame', geoType: 'box', geoArgs: [2.4, 1.6, 0.1], position: [0, 1.8, z0], rotation: [0,0,0], material: 'iron' });
+    parts.push({ name: 'screen', geoType: 'plane', geoArgs: [2.2, 1.4], position: [0, 1.8, z0 + 0.09], rotation: [0,0,0], material: 'screen', texture: ex.texture, emissiveColor: ex.lightColor });
+    parts.push({ name: 'label', geoType: 'box', geoArgs: [1.4, 0.18, 0.02], position: [0, 0.8, z0], rotation: [0,0,0], material: 'label' });
+  } else if (ex.type === 'crt') {
+    parts.push({ name: 'desk', geoType: 'box', geoArgs: [2.2, 0.06, 0.9], position: [0, 0.74, z0], rotation: [0,0,0], material: 'stone' });
+    for (const [dx, dz] of [[-1.0, -0.38], [1.0, -0.38], [-1.0, 0.38], [1.0, 0.38]]) {
+      parts.push({ name: 'desk_leg', geoType: 'box', geoArgs: [0.06, 0.74, 0.06], position: [dx, 0.37, z0 + dz], rotation: [0,0,0], material: 'stone' });
+    }
+    parts.push({ name: 'back_panel', geoType: 'box', geoArgs: [2.2, 0.50, 0.04], position: [0, 0.50, z0 - 0.43], rotation: [0,0,0], material: 'stone' });
+    parts.push({ name: 'mon_stand', geoType: 'box', geoArgs: [0.5, 0.04, 0.35], position: [0, 0.79, z0 - 0.05], rotation: [0,0,0], material: 'beige_dark' });
+    parts.push({ name: 'mon_body', geoType: 'box', geoArgs: [0.95, 0.72, 0.65], position: [0, 1.17, z0 - 0.08], rotation: [0,0,0], material: 'beige' });
+    parts.push({ name: 'bezel', geoType: 'box', geoArgs: [0.82, 0.60, 0.03], position: [0, 1.19, z0 + 0.24], rotation: [0,0,0], material: 'dark' });
+    parts.push({ name: 'screen', geoType: 'plane', geoArgs: [0.74, 0.52], position: [0, 1.19, z0 + 0.28], rotation: [0,0,0], material: 'screen', texture: ex.texture, emissiveColor: ex.lightColor });
+    parts.push({ name: 'mon_led', geoType: 'cylinder', geoArgs: [0.012, 0.012, 0.01, 6], position: [0.32, 0.92, z0 + 0.24], rotation: [Math.PI/2,0,0], material: 'led_green' });
+    parts.push({ name: 'tower', geoType: 'box', geoArgs: [0.20, 0.45, 0.42], position: [0.85, 1.0, z0 - 0.05], rotation: [0,0,0], material: 'beige' });
+    parts.push({ name: 'tower_front', geoType: 'box', geoArgs: [0.18, 0.43, 0.01], position: [0.85, 1.0, z0 + 0.16], rotation: [0,0,0], material: 'beige_dark' });
+    parts.push({ name: 'floppy', geoType: 'box', geoArgs: [0.10, 0.012, 0.01], position: [0.85, 1.14, z0 + 0.17], rotation: [0,0,0], material: 'grey_metal' });
+    parts.push({ name: 'cdrom', geoType: 'box', geoArgs: [0.12, 0.025, 0.01], position: [0.85, 1.08, z0 + 0.17], rotation: [0,0,0], material: 'beige_dark' });
+    parts.push({ name: 'eject_btn', geoType: 'box', geoArgs: [0.015, 0.012, 0.008], position: [0.90, 1.06, z0 + 0.175], rotation: [0,0,0], material: 'grey_metal' });
+    parts.push({ name: 'power_btn', geoType: 'cylinder', geoArgs: [0.015, 0.015, 0.008, 8], position: [0.85, 1.18, z0 + 0.175], rotation: [Math.PI/2,0,0], material: 'grey_metal' });
+    parts.push({ name: 'tower_led', geoType: 'cylinder', geoArgs: [0.008, 0.008, 0.008, 6], position: [0.85, 1.16, z0 + 0.175], rotation: [Math.PI/2,0,0], material: 'led_green' });
+    parts.push({ name: 'keyboard', geoType: 'box', geoArgs: [0.48, 0.02, 0.16], position: [-0.05, 0.78, z0 + 0.28], rotation: [0,0,0], material: 'beige_dark' });
+    for (let row = 0; row < 4; row++) {
+      parts.push({ name: `keys_${row}`, geoType: 'box', geoArgs: [0.42, 0.003, 0.025], position: [-0.05, 0.80, z0 + 0.22 + row * 0.035], rotation: [0,0,0], material: 'dark_keys' });
+    }
+    parts.push({ name: 'mousepad', geoType: 'box', geoArgs: [0.18, 0.005, 0.20], position: [0.42, 0.775, z0 + 0.28], rotation: [0,0,0], material: 'dark' });
+    parts.push({ name: 'mouse', geoType: 'box', geoArgs: [0.05, 0.02, 0.08], position: [0.42, 0.79, z0 + 0.28], rotation: [0,0,0], material: 'beige' });
+    parts.push({ name: 'label', geoType: 'box', geoArgs: [1.4, 0.18, 0.02], position: [0, 0.55, z0 + 0.55], rotation: [0,0,0], material: 'label' });
+  } else if (ex.type === 'lab') {
+    parts.push({ name: 'bench', geoType: 'box', geoArgs: [2.0, 0.08, 0.9], position: [0, 0.9, z0], rotation: [0,0,0], material: 'stone' });
+    for (const dx of [-0.9, 0.9]) {
+      parts.push({ name: 'bench_leg', geoType: 'box', geoArgs: [0.06, 0.9, 0.8], position: [dx, 0.45, z0], rotation: [0,0,0], material: 'stone' });
+    }
+    parts.push({ name: 'icosahedron', geoType: 'icosahedron', geoArgs: [0.35, 0], position: [0, 1.7, z0], rotation: [0,0,0], material: 'emissive', emissiveColor: ex.lightColor, flatShading: true });
+    parts.push({ name: 'ring', geoType: 'torus', geoArgs: [0.5, 0.02, 8, 24], position: [0, 1.7, z0], rotation: [Math.PI/2,0,0], material: 'emissive', emissiveColor: ex.lightColor });
+    parts.push({ name: 'label', geoType: 'box', geoArgs: [1.4, 0.18, 0.02], position: [0, 0.7, z0 + 0.6], rotation: [0,0,0], material: 'label' });
+  } else if (ex.type === 'carousel') {
+    parts.push({ name: 'pillar', geoType: 'cylinder', geoArgs: [0.08, 0.08, 2.5, 8], position: [0, 1.25, z0], rotation: [0,0,0], material: 'iron' });
+    for (let f = 0; f < 5; f++) {
+      const fa = (f / 5) * Math.PI * 2;
+      parts.push({
+        name: `frame_${f}`, geoType: 'box', geoArgs: [0.8, 0.6, 0.04],
+        position: [Math.sin(fa) * 0.7, 1.5, z0 + Math.cos(fa) * 0.7],
+        rotation: [0, -fa, 0],
+        material: f === 0 ? 'emissive' : 'iron',
+        ...(f === 0 ? { emissiveColor: ex.lightColor } : {}),
+      });
+    }
+    parts.push({ name: 'label', geoType: 'box', geoArgs: [1.4, 0.18, 0.02], position: [0, 0.5, z0 + 1.0], rotation: [0,0,0], material: 'label' });
+  } else if (ex.type === 'iceberg') {
+    const layers = [
+      { w: 0.6, h: 0.12, y: 2.05, color: '#eeffff', emColor: '#ccffff', emInt: 0.5 },
+      { w: 0.9, h: 0.10, y: 1.85, color: '#88ddff', emColor: '#66ccee', emInt: 0.35 },
+      { w: 1.2, h: 0.14, y: 1.65, color: '#55bbdd', emColor: '#44aacc', emInt: 0.25 },
+      { w: 1.5, h: 0.16, y: 1.42, color: '#3399bb', emColor: '#228899', emInt: 0.2 },
+      { w: 1.8, h: 0.18, y: 1.16, color: '#226688', emColor: '#115577', emInt: 0.15 },
+      { w: 2.0, h: 0.20, y: 0.88, color: '#114466', emColor: '#0a3355', emInt: 0.1 },
+    ];
+    parts.push({ name: 'waterline', geoType: 'cylinder', geoArgs: [1.1, 1.1, 0.01, 16], position: [0, 1.92, z0], rotation: [0,0,0], material: 'waterline' });
+    layers.forEach((l, li) => {
+      parts.push({
+        name: `ice_${li}`, geoType: 'box', geoArgs: [l.w, l.h, l.w * 0.6],
+        position: [0, l.y, z0], rotation: [0,0,0],
+        material: 'ice', color: l.color, emissiveColor: l.emColor, emissiveIntensity: l.emInt,
+        flatShading: true,
+      });
+    });
+    parts.push({ name: 'label', geoType: 'box', geoArgs: [1.4, 0.18, 0.02], position: [0, 0.55, z0 + 0.7], rotation: [0,0,0], material: 'label' });
+  } else if (ex.type === 'qa') {
+    parts.push({ name: 'base', geoType: 'cylinder', geoArgs: [0.35, 0.45, 0.15, 8], position: [0, 0.075, z0], rotation: [0,0,0], material: 'stone' });
+    parts.push({ name: 'column', geoType: 'cylinder', geoArgs: [0.18, 0.25, 0.65, 8], position: [0, 0.475, z0], rotation: [0,0,0], material: 'iron' });
+    parts.push({ name: 'cap', geoType: 'cylinder', geoArgs: [0.38, 0.28, 0.1, 8], position: [0, 0.85, z0], rotation: [0,0,0], material: 'stone' });
+    parts.push({ name: 'glow_ring', geoType: 'torus', geoArgs: [0.32, 0.015, 8, 24], position: [0, 0.91, z0], rotation: [-Math.PI/2,0,0], material: 'emissive', emissiveColor: ex.lightColor });
+    // QA voxel text exported as approximate bounding boxes
+    parts.push({ name: 'qa_text', geoType: 'box', geoArgs: [1.0, 0.84, 0.12], position: [0, 1.5, z0], rotation: [0,0,0], material: 'emissive', emissiveColor: ex.lightColor, flatShading: true });
+    parts.push({ name: 'label', geoType: 'box', geoArgs: [1.4, 0.18, 0.02], position: [0, 0.55, z0 + 0.6], rotation: [0,0,0], material: 'label' });
+  }
+
+  // Round all positions/rotations
+  parts.forEach(p => {
+    p.position = p.position.map(r4);
+    p.rotation = p.rotation.map(r4);
+    p.geoArgs = p.geoArgs.map(r4);
+  });
+
+  exhibits.push({
+    id: ex.id,
+    type: ex.type,
+    lightColor: ex.lightColor,
+    groupPosition: [r4(groupX), 0, r4(groupZ)],
+    groupRotationY: r4(groupRotY),
+    alcoveIndex: i,
+    parts,
+  });
+}
+
+// ─── Portal Geometry ────────────────────────────────────────────────
+const portals = {
+  floor: {
+    position: [0, 0.02, 0],
+    rotationX: r4(-Math.PI / 2),
+    parts: [
+      { name: 'hex_ring', geoType: 'ring', geoArgs: [0.5, 0.75, 6], material: 'portal_cyan' },
+      { name: 'center_dot', geoType: 'circle', geoArgs: [0.1, 16], material: 'portal_cyan' },
+    ],
+  },
+  ceiling: {
+    position: [0, r4(CEILING_HEIGHT - 0.02), 0],
+    parts: [
+      { name: 'pb_core', geoType: 'sphere', geoArgs: [0.06, 12, 12], material: 'portal_gold', color: '#ffc060' },
+      { name: 'hg_shell', geoType: 'icosahedron', geoArgs: [0.30, 1], material: 'portal_silver', color: '#b8c4d0', wireframe: true },
+      { name: 'ring_i', geoType: 'torus', geoArgs: [0.40, 0.012, 12, 64], pivotRotation: [0,0,0], material: 'portal_amber', color: '#ffa040' },
+      { name: 'ring_j', geoType: 'torus', geoArgs: [0.43, 0.012, 12, 64], pivotRotation: [r4(Math.PI/2),0,0], material: 'portal_amber', color: '#ffa040' },
+      { name: 'ring_k', geoType: 'torus', geoArgs: [0.46, 0.012, 12, 64], pivotRotation: [0,0,r4(Math.PI/2)], material: 'portal_amber', color: '#ffa040' },
+    ],
+  },
+};
+
 // ─── Write output ───────────────────────────────────────────────────
 const data = {
   config: { ATRIUM_RADIUS, CEILING_HEIGHT, CORRIDOR_LENGTH, CORRIDOR_WIDTH, WALL_THICKNESS, ALCOVE_DEPTH, ALCOVE_WIDTH, NUM_SPOKES },
@@ -286,6 +427,8 @@ const data = {
   sconces,
   cameras,
   collisions,
+  exhibits,
+  portals,
 };
 
 const outPath = path.join(__dirname, 'scene-data.json');
@@ -298,6 +441,8 @@ console.log(`  Lights:     ${lights.length}`);
 console.log(`  Sconces:    ${sconces.length}`);
 console.log(`  Cameras:    ${cameras.length}`);
 console.log(`  Collisions: ${collisions.length}`);
+console.log(`  Exhibits:   ${exhibits.length} (${exhibits.reduce((n, e) => n + e.parts.length, 0)} parts)`);
+console.log(`  Portals:    2 (floor + ceiling)`);
 console.log(`\nWrote: ${outPath}`);
 console.log(`Size:  ${(fs.statSync(outPath).size / 1024).toFixed(1)} KB`);
 console.log('\nNext: Open Blender and run build-blender-scene.py');

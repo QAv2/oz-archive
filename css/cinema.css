@@ -1,0 +1,31 @@
+/* ─── Cinema Mode: hide all interactive chrome ─────────────────────── */
+body.cinema-mode #boot-screen,
+body.cinema-mode #door-overlay,
+body.cinema-mode #crosshair,
+body.cinema-mode #hud-prompt,
+body.cinema-mode #info-panel,
+body.cinema-mode #overlay-panel,
+body.cinema-mode #bmc-btn,
+body.cinema-mode #tour-fade,
+body.cinema-mode #tour-hud,
+body.cinema-mode #tour-exhibit-btn,
+body.cinema-mode #tour-back-btn,
+body.cinema-mode #tour-curator-btn,
+body.cinema-mode #portal-flash,
+body.cinema-mode #portal-sky-flash,
+body.cinema-mode #exhibit-flash,
+body.cinema-mode .skip-link {
+  display: none !important;
+}
+
+/* Lock canvas to 1920×1080 for deterministic renders */
+body.cinema-mode {
+  width: 1920px !important;
+  height: 1080px !important;
+  overflow: hidden;
+}
+
+body.cinema-mode #game-canvas {
+  width: 1920px !important;
+  height: 1080px !important;
+}

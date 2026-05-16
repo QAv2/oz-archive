@@ -97,13 +97,20 @@ let crtEnabled = false;
 let bloomPass = null;
 
 export function createComposer(renderer, scene, camera, mobile = false) {
+  const isCinema = new URLSearchParams(window.location.search).has('cinema');
+  const w = isCinema ? 1920 : window.innerWidth;
+  const h = isCinema ? 1080 : window.innerHeight;
+
+  // Update CRT shader resolution to match render target
+  CRTShader.uniforms.resolution.value.set(w, h);
+
   composer = new EffectComposer(renderer);
   composer.addPass(new RenderPass(scene, camera));
 
   // Phosphor bloom — bright areas (screens, emissives) glow through CRT
   if (!mobile) {
     bloomPass = new UnrealBloomPass(
-      new THREE.Vector2(window.innerWidth, window.innerHeight),
+      new THREE.Vector2(w, h),
       0.3,    // strength
       0.4,    // radius
       0.85    // threshold — only bright pixels bloom
@@ -111,10 +118,12 @@ export function createComposer(renderer, scene, camera, mobile = false) {
     composer.addPass(bloomPass);
   }
 
-  window.addEventListener('resize', () => {
-    composer.setSize(window.innerWidth, window.innerHeight);
-    if (bloomPass) bloomPass.resolution.set(window.innerWidth, window.innerHeight);
-  });
+  if (!isCinema) {
+    window.addEventListener('resize', () => {
+      composer.setSize(window.innerWidth, window.innerHeight);
+      if (bloomPass) bloomPass.resolution.set(window.innerWidth, window.innerHeight);
+    });
+  }
 
   return composer;
 }

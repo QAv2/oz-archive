@@ -12,9 +12,10 @@ import { createComposer, updateCRT, renderComposer, startCRTWarmup } from './sha
 import { initProxyChat, toggleProxyChat } from './proxychat.js';
 
 
-let renderer, scene, composer;
+let renderer, scene, composer, cam;
 const clock = new THREE.Clock();
 let isMobileMode = false;
+const isCinemaMode = new URLSearchParams(window.location.search).has('cinema');
 
 // Tour module — lazy-loaded only on mobile
 let tourModule = null;
@@ -35,23 +36,31 @@ async function init() {
     canvas,
     antialias: !isMobileMode,
   });
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobileMode ? 1.5 : 2));
+  // Cinema mode: lock to 1920×1080 regardless of browser window
+  const renderW = isCinemaMode ? 1920 : window.innerWidth;
+  const renderH = isCinemaMode ? 1080 : window.innerHeight;
+  renderer.setSize(renderW, renderH);
+  renderer.setPixelRatio(isCinemaMode ? 1 : Math.min(window.devicePixelRatio, isMobileMode ? 1.5 : 2));
   renderer.toneMapping = THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure = 2.2;
 
-  window.addEventListener('resize', () => {
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
+  if (!isCinemaMode) {
+    window.addEventListener('resize', () => {
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  }
 
   // Scene
   scene = new THREE.Scene();
   buildScene(scene, { mobile: isMobileMode });
   buildExhibits(scene);
 
-  // Camera setup — desktop vs mobile
-  let cam;
-  if (isMobileMode) {
+  // Camera setup — desktop vs mobile vs cinema (cam is module-scoped for animate())
+  if (isCinemaMode) {
+    // Cinema mode — standalone camera, locked 16:9 aspect, no controls
+    cam = new THREE.PerspectiveCamera(75, 1920 / 1080, 0.1, 100);
+    cam.position.set(0, PLAYER_HEIGHT, 0);
+  } else if (isMobileMode) {
     tourModule = await import('./tour.js');
     cam = tourModule.createTourCamera(renderer);
     tourModule.initTourControls(renderer);
@@ -73,6 +82,17 @@ async function init() {
   // ─── Start render loop NOW (renders behind overlays) ────────────
   clock.start();
   animate();
+
+  if (isCinemaMode) {
+    // ─── Cinema Mode: skip all UI, expose globals ──────────────────
+    hideBootScreen();
+    const door = document.getElementById('door-overlay');
+    if (door) door.style.display = 'none';
+
+    window.__ozarchive = { scene, renderer, camera: cam, composer, clock };
+    window.dispatchEvent(new Event('oz:ready'));
+    return; // skip all interactive setup
+  }
 
   // ─── Boot Sequence (skip with ?skipboot for dev/testing) ───────
   const skipBoot = new URLSearchParams(window.location.search).has('skipboot');
@@ -169,7 +189,9 @@ function animate() {
   const delta = clock.getDelta();
   const elapsed = clock.getElapsedTime();
 
-  if (isMobileMode) {
+  if (isCinemaMode) {
+    // Cinema mode: camera controlled by cinema.js, skip interactive updates
+  } else if (isMobileMode) {
     if (tourModule) tourModule.updateTour(delta, elapsed);
   } else {
     updatePlayer(delta);
@@ -178,7 +200,7 @@ function animate() {
     updateSkyPortal(delta, elapsed);
   }
 
-  updateExhibits(elapsed);
+  updateExhibits(elapsed, cam, delta);
 
   // Torch flicker — compound sine waves for organic warmth
   for (const t of torchLights) {

@@ -16,6 +16,12 @@ function loadTex(path, repeatX = 1, repeatY = 1, srgb = true) {
   return tex;
 }
 
+// Smoothstep for cleaner unfurl ease
+function smoothstep(edge0, edge1, x) {
+  const t = Math.max(0, Math.min(1, (x - edge0) / (edge1 - edge0)));
+  return t * t * (3 - 2 * t);
+}
+
 // ─── Shared Exhibit Materials (vault-cohesive, textured) ────────────
 const ironMat = new THREE.MeshStandardMaterial({
   color: 0x2e2c28, roughness: 0.65, metalness: 0.45,
@@ -44,6 +50,38 @@ const beigeDarkMat = new THREE.MeshStandardMaterial({
   normalMap: loadTex('textures/plastic-normal.jpg', 1, 1, false),
   normalScale: new THREE.Vector2(0.5, 0.5),
 });
+// Parchment — shared for scroll exhibit
+const parchmentTex = (() => {
+  const t = texLoader.load('textures/parchment-color.jpg');
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+})();
+const parchmentNormal = texLoader.load('textures/parchment-normal.jpg');
+const parchmentMat = new THREE.MeshStandardMaterial({
+  map: parchmentTex,
+  normalMap: parchmentNormal,
+  normalScale: new THREE.Vector2(0.4, 0.4),
+  color: 0xe8d8a8,
+  emissive: 0x4a3a18,
+  emissiveIntensity: 0.10,
+  roughness: 0.75,
+  metalness: 0.0,
+  side: THREE.DoubleSide,
+});
+const rollerMat = new THREE.MeshStandardMaterial({
+  color: 0x3a2812, roughness: 0.55, metalness: 0.4,
+});
+const brassMat = new THREE.MeshStandardMaterial({
+  color: 0xb88c3a, roughness: 0.45, metalness: 0.75,
+  emissive: 0x4a3010, emissiveIntensity: 0.15,
+});
+// Laptop chassis (anodised dark metal)
+const laptopMat = new THREE.MeshStandardMaterial({
+  color: 0x2a2c30, roughness: 0.45, metalness: 0.55,
+});
+const laptopDarkMat = new THREE.MeshStandardMaterial({
+  color: 0x101216, roughness: 0.55, metalness: 0.45,
+});
 const labelMat = new THREE.MeshStandardMaterial({
   color: 0x0c0c0a, emissive: 0x00ff41, emissiveIntensity: 0.05,
   roughness: 0.7, metalness: 0.3,
@@ -68,6 +106,8 @@ export function buildExhibits(scene) {
       case 'crt':      buildCRT(group, data); break;
       case 'lab':      buildLab(group, data); break;
       case 'carousel': buildCarousel(group, data); break;
+      case 'scroll':   buildScroll(group, data); break;
+      case 'laptop':   buildLaptop(group, data); break;
       case 'arcade':   buildScreen(group, data); break;  // no exhibit uses this — fallback to screen
       case 'iceberg':  buildIceberg(group, data); break;
       case 'qa':       buildQA(group, data); break;
@@ -574,20 +614,267 @@ function buildQA(group, data) {
   addLabel(group, data.name, 0, 0.55, -ALCOVE_DEPTH * 0.3 + 0.6);
 }
 
+// ─── Floating Scroll w/ Unfurl Animation ────────────────────────────
+function buildScroll(group, data) {
+  const z0 = -ALCOVE_DEPTH * 0.3;
+  const scrollY = 1.65;
+  const scrollH = 1.40;
+  const halfW = 1.00;       // unfurled half-width (rollers sit at ±halfW)
+  const rollerR = 0.045;
+  const furledR = 0.13;     // chunky rolled-scroll cylinder
+  const winW = 1.55;
+  const winH = 0.95;        // 1200:840 ≈ 1.43:1 — keep close
+
+  // Furled cylinder — visible from atrium, fades as scroll unfurls
+  const furled = new THREE.Mesh(
+    new THREE.CylinderGeometry(furledR, furledR, scrollH * 1.02, 20),
+    parchmentMat.clone()
+  );
+  furled.material.transparent = true;
+  furled.position.set(0, scrollY, z0);
+  furled.userData.scrollPart = 'furled';
+  group.add(furled);
+
+  // End caps on furled scroll (brass knobs visible from atrium)
+  for (const sy of [-1, 1]) {
+    const cap = new THREE.Mesh(
+      new THREE.CylinderGeometry(furledR * 1.18, furledR * 1.18, 0.05, 16),
+      brassMat
+    );
+    cap.position.set(0, scrollY + sy * (scrollH * 0.51), z0);
+    cap.userData.scrollPart = 'furledCap';
+    cap.material = brassMat.clone();
+    cap.material.transparent = true;
+    group.add(cap);
+  }
+
+  // Parchment plane — grows in X as scroll unfurls
+  const parchment = new THREE.Mesh(
+    new THREE.PlaneGeometry(halfW * 2, scrollH),
+    parchmentMat.clone()
+  );
+  parchment.material.transparent = true;
+  parchment.position.set(0, scrollY, z0);
+  parchment.scale.x = 0.001;
+  parchment.userData.scrollPart = 'parchment';
+  group.add(parchment);
+
+  // Window plane (landing-page screenshot) — overlays parchment, polygon-offset to avoid z-fight
+  const winMat = new THREE.MeshStandardMaterial({
+    color: data.lightColor,
+    emissive: data.lightColor,
+    emissiveIntensity: 0.25,
+    transparent: true,
+    opacity: 0,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -1,
+  });
+  if (data.texture) {
+    const loader = new THREE.TextureLoader();
+    loader.load(data.texture, (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      winMat.map = tex;
+      winMat.emissiveMap = tex;
+      winMat.color.set(0xffffff);
+      winMat.emissive.set(0xffffff);
+      winMat.emissiveIntensity = 0.55;
+      winMat.needsUpdate = true;
+    });
+  }
+  const win = new THREE.Mesh(new THREE.PlaneGeometry(winW, winH), winMat);
+  win.position.set(0, scrollY, z0 + 0.008);
+  win.scale.x = 0.001;
+  win.userData.scrollPart = 'window';
+  group.add(win);
+
+  // Left + right rollers (vertical cylinders) — slide outward as scroll unfurls
+  for (const side of [-1, 1]) {
+    const roller = new THREE.Mesh(
+      new THREE.CylinderGeometry(rollerR, rollerR, scrollH * 1.06, 14),
+      rollerMat
+    );
+    roller.position.set(0, scrollY, z0); // starts at center, animates outward
+    roller.material = rollerMat.clone();
+    roller.material.transparent = true;
+    roller.material.opacity = 0;
+    roller.userData.scrollPart = side < 0 ? 'rollerL' : 'rollerR';
+    roller.userData.targetX = side * halfW;
+    group.add(roller);
+
+    // Brass cap top + bottom of each roller
+    for (const cy of [-1, 1]) {
+      const cap = new THREE.Mesh(
+        new THREE.CylinderGeometry(rollerR * 1.6, rollerR * 1.6, 0.04, 14),
+        brassMat
+      );
+      cap.position.set(0, scrollY + cy * (scrollH * 0.53), z0);
+      cap.material = brassMat.clone();
+      cap.material.transparent = true;
+      cap.material.opacity = 0;
+      cap.userData.scrollPart = side < 0 ? 'rollerLCap' : 'rollerRCap';
+      cap.userData.targetX = side * halfW;
+      group.add(cap);
+    }
+  }
+
+  // Group-level animation state — read by updateExhibits each frame
+  group.userData.scroll = true;
+  group.userData.unfurlT = 0;       // 0 = furled, 1 = unfurled
+  group.userData.targetT = 0;       // driven by proximity in updateExhibits
+  group.userData.scrollY = scrollY;
+  group.userData.scrollZ = z0;
+
+  addLabel(group, data.name, 0, 0.55, z0, data.lightColor);
+}
+
+// ─── Open Laptop on a Simple Table ──────────────────────────────────
+function buildLaptop(group, data) {
+  const z0 = -ALCOVE_DEPTH * 0.3;
+  const tableY = 0.78;
+
+  // ── Table ──
+  const tableTop = new THREE.Mesh(
+    new THREE.BoxGeometry(1.40, 0.04, 0.80),
+    stoneMat
+  );
+  tableTop.position.set(0, tableY, z0);
+  group.add(tableTop);
+  for (const [dx, dz] of [[-0.60, -0.32], [0.60, -0.32], [-0.60, 0.32], [0.60, 0.32]]) {
+    const leg = new THREE.Mesh(
+      new THREE.BoxGeometry(0.05, tableY, 0.05),
+      stoneMat
+    );
+    leg.position.set(dx, tableY / 2, z0 + dz);
+    group.add(leg);
+  }
+
+  // ── Laptop base (closed half) ──
+  const baseW = 0.40, baseD = 0.28, baseT = 0.022;
+  const baseY = tableY + 0.02 + baseT / 2;
+  const base = new THREE.Mesh(new THREE.BoxGeometry(baseW, baseT, baseD), laptopMat);
+  base.position.set(0, baseY, z0);
+  group.add(base);
+
+  // Keyboard inset
+  const kb = new THREE.Mesh(
+    new THREE.BoxGeometry(baseW * 0.82, 0.003, baseD * 0.55),
+    laptopDarkMat
+  );
+  kb.position.set(0, baseY + baseT / 2 + 0.0017, z0 + 0.02);
+  group.add(kb);
+  // Faint key rows
+  for (let row = 0; row < 4; row++) {
+    const keys = new THREE.Mesh(
+      new THREE.BoxGeometry(baseW * 0.74, 0.003, 0.028),
+      new THREE.MeshStandardMaterial({ color: 0x303236, roughness: 0.65 })
+    );
+    keys.position.set(0, baseY + baseT / 2 + 0.002, z0 + 0.0 + row * 0.036);
+    group.add(keys);
+  }
+
+  // Trackpad
+  const tp = new THREE.Mesh(
+    new THREE.BoxGeometry(0.10, 0.002, 0.060),
+    new THREE.MeshStandardMaterial({ color: 0x1c1e22, roughness: 0.5, metalness: 0.3 })
+  );
+  tp.position.set(0, baseY + baseT / 2 + 0.0015, z0 + 0.11);
+  group.add(tp);
+
+  // Power LED
+  const led = new THREE.Mesh(
+    new THREE.CylinderGeometry(0.005, 0.005, 0.002, 6),
+    new THREE.MeshStandardMaterial({ color: 0xffa040, emissive: 0xffa040, emissiveIntensity: 0.9 })
+  );
+  led.rotation.x = Math.PI / 2;
+  led.position.set(-baseW / 2 + 0.018, baseY + baseT / 2 + 0.0015, z0 + 0.13);
+  group.add(led);
+
+  // ── Screen half (hinge at back of base) ──
+  // Hinge axis along X at (y=base top, z=back edge of base)
+  const hingeZ = z0 - baseD / 2;
+  const hingeY = baseY + baseT / 2;
+  const pivot = new THREE.Object3D();
+  pivot.position.set(0, hingeY, hingeZ);
+  // rotation.x negative tilts the screen top toward -Z (back of laptop, away from player)
+  pivot.rotation.x = -0.32;  // ~108° open from base
+  group.add(pivot);
+
+  const screenW = 0.40, screenH = 0.26, screenT = 0.012;
+  const screenBack = new THREE.Mesh(
+    new THREE.BoxGeometry(screenW, screenH, screenT),
+    laptopMat
+  );
+  // pivot at bottom-back of screen: extend +Y (up from hinge), -Z (back face flush at z=0)
+  screenBack.position.set(0, screenH / 2, -screenT / 2);
+  pivot.add(screenBack);
+
+  // Bezel on front of screen back (+Z side in pivot local)
+  const bezel = new THREE.Mesh(
+    new THREE.BoxGeometry(screenW * 0.94, screenH * 0.86, 0.002),
+    laptopDarkMat
+  );
+  bezel.position.set(0, screenH * 0.50, +0.0011);
+  pivot.add(bezel);
+
+  // Display plane (landing-page screenshot)
+  const displayMat = new THREE.MeshStandardMaterial({
+    color: data.lightColor,
+    emissive: data.lightColor,
+    emissiveIntensity: 0.35,
+    polygonOffset: true,
+    polygonOffsetFactor: -1,
+    polygonOffsetUnits: -1,
+  });
+  if (data.texture) {
+    const loader = new THREE.TextureLoader();
+    loader.load(data.texture, (tex) => {
+      tex.colorSpace = THREE.SRGBColorSpace;
+      displayMat.map = tex;
+      displayMat.color.set(0xffffff);
+      displayMat.emissive.set(0xffffff);
+      displayMat.emissiveMap = tex;
+      displayMat.emissiveIntensity = 0.75;
+      displayMat.needsUpdate = true;
+    });
+  }
+  const display = new THREE.Mesh(
+    new THREE.PlaneGeometry(screenW * 0.88, screenH * 0.78),
+    displayMat
+  );
+  display.position.set(0, screenH * 0.50, +0.0022);
+  pivot.add(display);
+
+  addLabel(group, data.name, 0, 0.40, z0, data.lightColor);
+}
+
 // ─── Shared Label ───────────────────────────────────────────────────
-function addLabel(group, text, x, y, z) {
+function addLabel(group, text, x, y, z, emissiveColor = null) {
   // Simple plate — text is handled by HTML overlay
+  const mat = emissiveColor != null
+    ? new THREE.MeshStandardMaterial({
+        color: 0x0c0c0a, emissive: emissiveColor, emissiveIntensity: 0.05,
+        roughness: 0.7, metalness: 0.3,
+      })
+    : labelMat;
   const plate = new THREE.Mesh(
     new THREE.BoxGeometry(1.4, 0.18, 0.02),
-    labelMat
+    mat
   );
   plate.position.set(x, y, z);
   group.add(plate);
 }
 
-// ─── Animate Exhibits (floating, spinning, carousel) ────────────────
-export function updateExhibits(time) {
-  for (const { group } of exhibitObjects) {
+// ─── Animate Exhibits (floating, spinning, carousel, scroll) ────────
+const _camWorld = new THREE.Vector3();
+const _grpWorld = new THREE.Vector3();
+
+// Proximity thresholds for scroll unfurl (meters, camera ↔ exhibit XZ)
+const SCROLL_UNFURL_NEAR = 3.0;   // fully unfurled at or below this distance
+const SCROLL_UNFURL_FAR  = 10.0;  // fully furled at or beyond this distance
+
+export function updateExhibits(time, camera = null, delta = 1 / 60) {
+  for (const { group, worldPos } of exhibitObjects) {
     group.traverse((child) => {
       if (child.userData.float) {
         child.position.y = child.userData.baseY + Math.sin(time * 1.5) * 0.1;
@@ -599,6 +886,7 @@ export function updateExhibits(time) {
         child.rotation.y = time * 0.5;
       }
     });
+
     if (group.userData.carousel) {
       // Slowly rotate the film frames (children after the pillar)
       group.children.forEach((child, idx) => {
@@ -607,6 +895,59 @@ export function updateExhibits(time) {
           child.position.x = Math.sin(fa) * 0.7;
           child.position.z = -ALCOVE_DEPTH * 0.3 + Math.cos(fa) * 0.7;
           child.rotation.y = -fa;
+        }
+      });
+    }
+
+    if (group.userData.scroll) {
+      // ── Drive unfurl progress from camera proximity (XZ distance) ──
+      let target = group.userData.targetT;
+      if (camera) {
+        camera.getWorldPosition(_camWorld);
+        const dx = _camWorld.x - worldPos.x;
+        const dz = _camWorld.z - worldPos.z;
+        const dist = Math.sqrt(dx * dx + dz * dz);
+        target = 1 - smoothstep(SCROLL_UNFURL_NEAR, SCROLL_UNFURL_FAR, dist);
+        group.userData.targetT = target;
+      }
+      // Smooth lerp toward target (≈0.45s settling)
+      const k = 1 - Math.exp(-delta * 6.0);
+      group.userData.unfurlT += (target - group.userData.unfurlT) * k;
+      const t = group.userData.unfurlT;
+
+      // Apply unfurl progress to each part
+      const parchScale = Math.max(0.001, t);
+      const winOpacity = Math.max(0, (t - 0.25) / 0.75);
+      const rollerOpacity = Math.max(0, (t - 0.05) / 0.95);
+      const furledOpacity = 1 - smoothstep(0.0, 0.35, t);
+
+      group.children.forEach((child) => {
+        const part = child.userData.scrollPart;
+        if (!part) return;
+        switch (part) {
+          case 'furled':
+          case 'furledCap':
+            child.material.opacity = furledOpacity;
+            child.visible = furledOpacity > 0.01;
+            break;
+          case 'parchment':
+            child.scale.x = parchScale;
+            child.material.opacity = Math.min(1, t * 1.6);
+            child.visible = t > 0.02;
+            break;
+          case 'window':
+            child.scale.x = parchScale;
+            child.material.opacity = winOpacity;
+            child.visible = winOpacity > 0.01;
+            break;
+          case 'rollerL':
+          case 'rollerR':
+          case 'rollerLCap':
+          case 'rollerRCap':
+            child.position.x = (child.userData.targetX || 0) * t;
+            child.material.opacity = rollerOpacity;
+            child.visible = rollerOpacity > 0.01;
+            break;
         }
       });
     }

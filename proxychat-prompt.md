@@ -13,7 +13,7 @@ This file is a local reference only — edits here do NOT affect the deployed sy
 
 ## What It Knows
 
-- All 8 exhibits: Disclosure Files, Intel Console (825 entities, 11 branches, navigator entry point), Qualia Algebra, Suppressed Physics, YouTube Channel, Iceberg Index, WorldView, Oz Archive
+- All 9 exhibits: Disclosure Files, Disclosure Scrolls, Intel Console (825 entities, 11 branches, navigator entry point), Qualia Algebra, Oracle, Iceberg Index, WorldView, Oz Archive, Suppressed Physics R&D (hidden — reached through the atrium ceiling portal)
 - The thesis: two lines of suppression (technological + ontological)
 - Convergent physics framework (public sources only)
 - Intelligence pipeline (documented, sourced)
