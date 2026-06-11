@@ -1,9 +1,9 @@
 // ─── Oz Archive — Main Entry Point ──────────────────────────────────
 import * as THREE from 'three';
-import { COLORS, PLAYER_HEIGHT, DOOR_SLIDE_DURATION, DOOR_AUTO_ADVANCE, EXHIBITS } from './config.js';
+import { PLAYER_HEIGHT } from './config.js';
 import { buildScene, torchLights } from './scene.js';
 import { buildExhibits, updateExhibits } from './exhibits.js';
-import { createPlayer, lockPointer, enableMovement, disableMovement, updatePlayer, getCamera, getControls, isLocked } from './player.js';
+import { createPlayer, lockPointer, enableMovement, disableMovement, updatePlayer, getControls, isLocked } from './player.js';
 import { initInteraction, updateInteraction, getActiveExhibitName } from './interaction.js';
 import { initPortal, updatePortal } from './portal.js';
 import { initSkyPortal, updateSkyPortal } from './portal-sky.js';

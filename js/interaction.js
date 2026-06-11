@@ -1,6 +1,5 @@
 // ─── Proximity Detection + Info Panels + Click/E-Key Handlers ──────
-import * as THREE from 'three';
-import { INTERACT_RANGE, EMISSIVE_PULSE_SPEED, EXHIBITS } from './config.js';
+import { INTERACT_RANGE, EMISSIVE_PULSE_SPEED } from './config.js';
 import { exhibitObjects } from './exhibits.js';
 import { getCamera, isLocked } from './player.js';
 

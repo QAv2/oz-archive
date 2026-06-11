@@ -396,16 +396,6 @@ async function sendMessage(text) {
   const indicator = showThinkingIndicator();
 
   try {
-    if (!PROXYCHAT_API_URL) {
-      await sleep(800);
-      indicator.remove();
-      const fallback = "I'm not connected to a server yet — my endpoint hasn't been configured. Once Joseph finishes the backend wiring, I'll be fully operational. In the meantime, feel free to explore the museum. Press Escape to close this window.";
-      await appendProxyMessage(fallback);
-      history.push({ role: 'assistant', content: fallback });
-      setStatus('offline');
-      return;
-    }
-
     // Capture user's location in the museum for spatial context
     let nearExhibit = null;
     try { nearExhibit = contextProviderFn ? contextProviderFn() : null; } catch (_) { /* not available */ }

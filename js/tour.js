@@ -6,7 +6,7 @@ import {
   PLAYER_HEIGHT, EXHIBITS,
 } from './config.js';
 import { exhibitObjects } from './exhibits.js';
-import { triggerExhibitAction, closeOverlay, isOverlayActive } from './interaction.js';
+import { triggerExhibitAction, isOverlayActive } from './interaction.js';
 
 
 // ─── Tour Camera ────────────────────────────────────────────────────
@@ -23,8 +23,6 @@ export function createTourCamera(renderer) {
 
   return camera;
 }
-
-export function getTourCamera() { return camera; }
 
 // ─── Tour Stops ─────────────────────────────────────────────────────
 // Stop 0 = atrium center, Stops 1-6 = 2m into each alcove
