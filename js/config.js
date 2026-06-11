@@ -3,7 +3,6 @@
 
 // ─── Layout ─────────────────────────────────────────────────────────
 export const ATRIUM_RADIUS = 6;          // hex inscribed radius (center to mid-wall) in meters
-export const ATRIUM_OUTER = 6.93;        // circumscribed radius (center to vertex) ≈ R / cos(30°)
 export const CEILING_HEIGHT = 3.5;
 export const CORRIDOR_LENGTH = 8;
 export const CORRIDOR_WIDTH = 4;
@@ -37,16 +36,6 @@ export const COLORS = {
   ambient:      0x1a1814,    // warm dark brown
 };
 
-export const CSS_COLORS = {
-  void:       '#060608',
-  termGreen:  '#00ff41',
-  evidGreen:  '#34d399',
-  evidAmber:  '#fbbf24',
-  cyan:       '#0abdc6',
-  textPrimary:'rgba(255,255,255,0.92)',
-  walls:      '#3a3a42',
-};
-
 // ─── Exhibit Data ───────────────────────────────────────────────────
 export const EXHIBITS = [
   {
@@ -63,8 +52,8 @@ export const EXHIBITS = [
   {
     id: 'qa',
     name: 'Qualia Algebra',
-    description: 'Ontological framework derived from "I exist." Interactive mind map — consciousness as fundamental, quaternion structure, and 3D spatial emergence.',
-    url: 'https://qav2.github.io/qualia-algebra/',
+    description: 'Ontological framework derived from "I exist." Read the papers and explore the interactive mind map — consciousness as fundamental, quaternion structure, and 3D spatial emergence.',
+    url: 'https://github.com/QAv2/qualia-algebra',
     action: 'link',
     texture: null,
     lightColor: 0xfbbf24,
