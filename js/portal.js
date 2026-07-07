@@ -1,11 +1,11 @@
-// ─── Hidden Portal: WorldView Intel Globe ────────────────────────────
+// ─── Hidden Portal: ARGUS Intel Globe ────────────────────────────
 // Stand at the center of the atrium and look straight down for 5 seconds.
 // A barely-visible hex glyph on the floor glows and fills as the timer
-// progresses. On completion — flash, then open WorldView in a new tab.
+// progresses. On completion — flash, then open ARGUS in a new tab.
 import * as THREE from 'three';
 import { getCamera, isLocked } from './player.js';
 
-const PORTAL_URL = 'https://worldview-intel.netlify.app';
+const PORTAL_URL = 'https://argus-intel-globe.netlify.app';
 const CENTER_RADIUS = 3.0;           // must be within 3m of origin (XZ)
 const LOOK_DOWN_THRESHOLD = -0.7;    // camera direction Y (≈45° below horizon)
 const HOLD_DURATION = 5.0;           // seconds of sustained look-down
@@ -26,7 +26,7 @@ export function initPortal(scene) {
 
   const ringGeo = new THREE.RingGeometry(0.5, 0.75, 6);
   const ringMat = new THREE.MeshBasicMaterial({
-    color: 0x0abdc6,
+    color: 0xc4ccd4,
     transparent: true,
     opacity: 0.15,
     side: THREE.DoubleSide,
@@ -36,7 +36,7 @@ export function initPortal(scene) {
 
   const dotGeo = new THREE.CircleGeometry(0.1, 16);
   const dotMat = new THREE.MeshBasicMaterial({
-    color: 0x0abdc6,
+    color: 0xc4ccd4,
     transparent: true,
     opacity: 0.2,
     side: THREE.DoubleSide,
@@ -49,7 +49,7 @@ export function initPortal(scene) {
   // ─── Progress ring: fills as timer accumulates ──────────────────
   const progGeo = new THREE.RingGeometry(0.5, 0.65, 64, 1, 0, 0.001);
   const progMat = new THREE.MeshBasicMaterial({
-    color: 0x0abdc6,
+    color: 0xc4ccd4,
     transparent: true,
     opacity: 0,
     side: THREE.DoubleSide,
