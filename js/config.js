@@ -52,8 +52,8 @@ export const EXHIBITS = [
   {
     id: 'qa',
     name: 'Qualia Algebra',
-    description: 'Ontological framework derived from "I exist." Read the papers and explore the interactive mind map — consciousness as fundamental, quaternion structure, and 3D spatial emergence.',
-    url: 'https://github.com/QAv2/qualia-algebra',
+    description: 'A mathematical framework for consciousness, built from the one fact that survives total skepticism: "I exist." Read the preprint — the observer as [1,0,0,0], a geometry of meaning, and how a shared world forms among many observers.',
+    url: 'https://doi.org/10.5281/zenodo.17685405',
     action: 'link',
     texture: null,
     lightColor: 0xfbbf24,

@@ -13,7 +13,7 @@ This file is a local reference only — edits here do NOT affect the deployed sy
 
 ## What It Knows
 
-- All 9 exhibits: Disclosure Files (153 nodes, 9 branches), Disclosure Scrolls (11 scrolls, two volumes), Intel Console (1,024 entities, 11 branches, navigator entry point), Qualia Algebra (Zenodo preprint 10.5281/zenodo.23308151), Oracle, Iceberg Index, ARGUS (hidden — floor portal), Oz Archive, Reference Frame Engine capsule (formerly Suppressed Physics R&D; hidden — ceiling portal; carries the October 2026 corrections)
+- All 9 exhibits: Disclosure Files (153 nodes, 9 branches), Disclosure Scrolls (11 scrolls, two volumes), Intel Console (1,024 entities, 11 branches, navigator entry point), Qualia Algebra (exhibit links the Zenodo concept DOI 10.5281/zenodo.17685405 → latest version), Oracle, Iceberg Index, ARGUS (hidden — floor portal), Oz Archive, Reference Frame Engine capsule (formerly Suppressed Physics R&D; hidden — ceiling portal; carries the October 2026 corrections)
 - The thesis: two lines of suppression (technological + ontological)
 - Convergent physics framework (public sources only)
 - Intelligence pipeline (documented, sourced)
