@@ -3,8 +3,8 @@
 // sphere inside three nested Helmholtz coil pairs at right angles
 // (R = 14 / 18 / 22.5 cm, each pair at ±R/2), scaled up ~2.1×.
 // The coils hold still; the sphere spins, and a void opens at the top
-// of its spin axis. Stand at atrium center, look UP for 5s → opens the
-// Reference Frame Engine capsule (which continues into The Mercury Core).
+// of its spin axis. Stand at atrium center, look UP for 5s → opens The
+// Mercury Core (its predecessor, the February 2026 capsule, is at /capsule/).
 import * as THREE from 'three';
 import { getCamera, isLocked } from './player.js';
 import { CEILING_HEIGHT } from './config.js';
