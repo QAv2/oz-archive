@@ -10,13 +10,13 @@ const OUT_DIR = path.resolve(__dirname, '..', 'textures');
 const targets = [
   {
     name: 'exhibit-scrolls.png',
-    url: 'https://disclosure-scrolls.netlify.app/',
+    url: 'https://qav2.github.io/disclosure-scrolls/',
     viewport: { width: 1200, height: 840 },
     clip: { x: 0, y: 0, width: 1200, height: 840 },
   },
   {
     name: 'exhibit-oracle.png',
-    url: 'https://qav2-oracle.netlify.app/',
+    url: 'https://qav2.github.io/oracle/',
     viewport: { width: 1280, height: 800 },
     clip: { x: 0, y: 0, width: 1280, height: 800 },
     waitUntil: 'domcontentloaded',

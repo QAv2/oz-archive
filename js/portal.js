@@ -5,7 +5,7 @@
 import * as THREE from 'three';
 import { getCamera, isLocked } from './player.js';
 
-const PORTAL_URL = 'https://argus-intel-globe.netlify.app';
+const PORTAL_URL = 'https://qav2.github.io/argus/';
 const CENTER_RADIUS = 3.0;           // must be within 3m of origin (XZ)
 const LOOK_DOWN_THRESHOLD = -0.7;    // camera direction Y (≈45° below horizon)
 const HOLD_DURATION = 5.0;           // seconds of sustained look-down
